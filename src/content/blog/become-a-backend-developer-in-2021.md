@@ -3,7 +3,7 @@ author: Muhammad Adam
 pubDatetime: 2021-09-21T05:17:19Z
 title: Become a Backend Developer in 2021
 postSlug: become-a-backend-developer-in-2021
-featured: true
+featured: false
 draft: false
 tags:
   - roadmap

@@ -7,7 +7,7 @@ export const SITE: Site = {
   title: "Muhammad Adam",
   ogImage: "",
   lightAndDarkMode: true,
-  postPerPage: 5,
+  postPerPage: 3,
 };
 
 export const LOCALE = ["en-EN"]; // set to [] to use the environment default

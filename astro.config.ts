@@ -18,7 +18,6 @@ export default defineConfig({
   ],
   markdown: {
     remarkPlugins: [
-      remarkToc,
       [
         remarkCollapse,
         {
