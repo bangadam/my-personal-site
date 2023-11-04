@@ -1,0 +1,49 @@
+---
+import { SITE } from "@config";
+import Layout from "@layouts/Layout.astro";
+import Main from "@layouts/Main.astro";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import Card from "@components/Card";
+import LinkButton from "@components/LinkButton.astro";
+import slugify from "@utils/slugify";
+import type { CollectionEntry } from "astro:content";
+import Project from "@components/Project";
+
+export interface Props {
+  pageNum: number;
+  totalPages: number;
+  projects: CollectionEntry<"project">[];
+}
+
+const { pageNum, totalPages, projects } = Astro.props;
+
+const prev = pageNum > 1 ? "" : "disabled";
+const next = pageNum < totalPages ? "" : "disabled";
+---
+
+<Layout title={`Projects | ${SITE.title}`}>
+  <Header activeNav="projects" />
+  <Main pageTitle="Projects" pageDesc="A list of all my projects">
+    <!-- use grid 2x2 -->
+    <div class="grid sm:grid-cols-2 gap-4">
+      {
+        projects.map(({ data }) => (
+          <Project href={data.externalLink} frontmatter={data} />
+        ))
+      }
+    </div>
+  </Main>
+</Layout>
+
+<style>
+  .pagination-wrapper {
+    @apply mb-8 mt-auto flex justify-center;
+  }
+  .disabled {
+    @apply pointer-events-none select-none opacity-50 hover:text-skin-base group-hover:fill-skin-base;
+  }
+  .disabled-svg {
+    @apply group-hover:!fill-skin-base;
+  }
+</style>

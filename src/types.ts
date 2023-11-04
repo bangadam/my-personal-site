@@ -40,3 +40,13 @@ export type SocialMedia =
   | "Steam"
   | "Telegram"
   | "Mastodon";
+
+// SKILLS config
+export type SkillObjects = {
+  name: string;
+  active: boolean;
+}[];
+
+export type SkillIcons = {
+  [skill: string]: string;
+};

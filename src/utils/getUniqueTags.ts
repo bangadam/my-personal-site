@@ -11,6 +11,7 @@ const getUniqueTags = (posts: CollectionEntry<"blog">[]) => {
         self.indexOf(value) === index
     )
     .sort((tagA: string, tagB: string) => tagA.localeCompare(tagB));
+
   return tags;
 };
 
