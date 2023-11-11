@@ -1,0 +1,72 @@
+---
+import { getCollection } from "astro:content";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import Layout from "@layouts/Layout.astro";
+import Main from "@layouts/Main.astro";
+import Tag from "@components/Tag.astro";
+import getUniqueTags from "@utils/getUniqueTags";
+import { SITE } from "@config";
+import { Debug } from "astro:components";
+
+// get data from public/data.json
+let results = await import("/public/data.json");
+// parse to json
+results = JSON.parse(JSON.stringify(results.default));
+
+const headerProps = {
+  className: "text-lg font-medium decoration-dashed hover:underline",
+};
+
+// string "Writing; Assistant" to array ["Writing", "Assistant"]
+const StringToArray = str => str.split(";").map(item => item.trim());
+---
+
+<!-- <Debug answer={results} /> -->
+<Layout title={`AllGpt Resources | ${SITE.title}`}>
+  <Header activeNav="all-gpt" />
+  <Main pageTitle="All GPT" pageDesc="All gpt resources you need">
+    <div class="grid gap-4 sm:grid-cols-2">
+      {
+        results.map(({ title, url, text, category }) => (
+          <>
+            <div class="max-w-sm overflow-hidden rounded shadow-lg">
+              <div class="px-6 py-4">
+                <div class="mb-2 text-xl font-bold">
+                  <a
+                    href={url}
+                    target="_blank"
+                    class="text-skin-base hover:underline"
+                  >
+                    {title}
+                  </a>
+                </div>
+                <p class="text-gray-700 text-base">{text}</p>
+              </div>
+              <div class="px-6 pb-2 pt-4">
+                {StringToArray(category).map(item => (
+                  <span class="bg-gray-200 text-gray-700 mb-2 mr-2 inline-block rounded-full px-3 py-1 text-sm font-semibold">
+                    #{item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </>
+        ))
+      }
+    </div>
+  </Main>
+  <Footer />
+</Layout>
+
+<style>
+  .pagination-wrapper {
+    @apply mb-8 mt-auto flex justify-center;
+  }
+  .disabled {
+    @apply pointer-events-none select-none opacity-50 hover:text-skin-base group-hover:fill-skin-base;
+  }
+  .disabled-svg {
+    @apply group-hover:!fill-skin-base;
+  }
+</style>
