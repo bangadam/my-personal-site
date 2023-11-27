@@ -26,7 +26,7 @@ const next = pageNum < totalPages ? "" : "disabled";
   <Header activeNav="projects" />
   <Main pageTitle="Projects" pageDesc="A list of all my projects">
     <!-- use grid 2x2 -->
-    <div class="grid sm:grid-cols-2 gap-4">
+    <div class="grid gap-4 sm:grid-cols-2">
       {
         projects.map(({ data }) => (
           <Project href={data.externalLink} frontmatter={data} />
