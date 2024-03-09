@@ -1,5 +1,5 @@
 ---
-author: Muhammad Adam
+author: Muhammad Meganata Adam
 pubDatetime: 2023-12-02T13:17:19Z
 title: 33+ Engineering Blogs to Supercharge Your System Design Skills
 postSlug: 33-engineering-blogs-to-supercharge-your-system-design-skills

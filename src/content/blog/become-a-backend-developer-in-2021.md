@@ -1,5 +1,5 @@
 ---
-author: Muhammad Adam
+author: Muhammad Meganata Adam
 pubDatetime: 2021-09-21T05:17:19Z
 title: Become a Backend Developer in 2021
 postSlug: become-a-backend-developer-in-2021

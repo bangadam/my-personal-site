@@ -1,5 +1,5 @@
 ---
-author: Muhammad Adam
+author: Muhammad Meganata Adam
 pubDatetime: 2023-06-02T05:00:00Z
 title: Writing Unit Test in Golang Easily
 postSlug: writing-unit-test-in-golang-easily

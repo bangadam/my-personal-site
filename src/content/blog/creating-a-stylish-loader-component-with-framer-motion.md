@@ -1,5 +1,5 @@
 ---
-author: Muhammad Adam
+author: Muhammad Meganata Adam
 pubDatetime: 2023-11-27T05:17:19Z
 title: Creating a Stylish Loader Component with Framer Motion
 postSlug: creating-a-stylish-loader-component-with-framer-motion

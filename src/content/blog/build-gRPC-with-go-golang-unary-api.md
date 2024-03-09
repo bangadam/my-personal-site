@@ -1,5 +1,5 @@
 ---
-author: Muhammad Adam
+author: Muhammad Meganata Adam
 pubDatetime: 2023-02-02T05:00:00Z
 title: Build gRPC with Go (golang) Unary API
 postSlug: build-grpc-with-go-golang-unary-api
@@ -29,68 +29,74 @@ There are 4 types of gRPC: unary, client-streaming, server-streaming, and bidire
 
 ![](https://cdn-images-1.medium.com/max/2000/1*zqfM1wQUh5z_TlIosmZ0yQ.png)
 
-* Unary RPC calls are the basic Request / Response that everyone is familiar with
+- Unary RPC calls are the basic Request / Response that everyone is familiar with
 
-* The client will send a message to the server and will receive one response from the server
+- The client will send a message to the server and will receive one response from the server
 
-* Unary RPC calls will be the most common for your APIs.
+- Unary RPC calls will be the most common for your APIs.
 
-* Unary calls are very well suited when your data is small
+- Unary calls are very well suited when your data is small
 
-* Start with Unary when writing APIs and use streaming API if performance is an issue
+- Start with Unary when writing APIs and use streaming API if performance is an issue
 
-* in gRPC Unary Calls are defined using Protocol Buffers
+- in gRPC Unary Calls are defined using Protocol Buffers
 
-* For each RPC call, we have to define a **Request **message and a **Response **message
+- For each RPC call, we have to define a **Request **message and a **Response **message
 
 ## Step 1: Setup Project
 
 the first step is to install the protoc gen go library as a library that will help you create gRPC, run the command below:
+
 ```bash
     $ go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.26
     $ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
 ```
+
 After that update the PATH on your computer by running the command below:
+
 ```bash
     $ export PATH="$PATH:**$(**go env GOPATH**)**/bin"
 ```
+
 ## Step 2: Create Proto File
 
 In the second step, of course, we will create the proto file, then we first define the contents of the request and response, then don’t forget to add the name of the service. You can see in the code below:
 
- ```proto
-syntax = "proto3"; 
+```proto
+syntax = "proto3";
 
 package greet;
 option go_package = "greet/greetpb";
 
 // model
 message Greeting {
-    string first_name = 1;
-    string last_name = 2;
+   string first_name = 1;
+   string last_name = 2;
 }
 
 // request
 message GreetRequest {
-    Greeting greeting = 1;
+   Greeting greeting = 1;
 }
 
 // response
 message GreetResponse {
-    string result = 1;
+   string result = 1;
 }
 
 service GreetService{
-    // unary
-    rpc Greet(GreetRequest) returns (GreetResponse) {}
+   // unary
+   rpc Greet(GreetRequest) returns (GreetResponse) {}
 }
 view rawgreet.proto hosted with ❤ by GitHub
- ```
+```
 
 After creating the proton file, we will generate the file into a gRPC file using the command below:
+
 ```bash
     $ protoc greet/greetpb/greet.proto — go_out=plugins=grpc:.
 ```
+
 when we run the command, the gRPC file will automatically be created as shown below:
 
 ![](https://cdn-images-1.medium.com/max/2000/1*cHhcwFTFyABeFN932RqZ_Q.png)
@@ -98,6 +104,7 @@ when we run the command, the gRPC file will automatically be created as shown be
 ## Step 3: Create Server File
 
 Setelah kita membuat file protonya langkah berikutnya adalah membuat file server yang aku taruh di dalam folder **greet_server/server.go ,** berikut adalah code untuk servernya :
+
 ```go
 package main
 
@@ -146,7 +153,7 @@ As we saw above there is a main func that serves as the **main** function to run
 
 After we have created the file server, the next step is that we will create a client file that functions as the client, we will create the file in the **greet_client/client.go** folder, here are the contents of the code:
 
- ```go
+```go
 package main
 
 import (
@@ -186,7 +193,7 @@ func doUnary(c greetpb.GreetServiceClient) {
 
 	fmt.Printf("Response from Greet: %v", res.Result)
 }
- ```
+```
 
 Just like the file server, in this client, we also create a func **main** which is useful for running as the client-side while func **doUnary** is useful for calling func **Greet** from the server.
 
@@ -198,7 +205,7 @@ The last step we will try to run the two files, namely the server and client, th
 
 ## Conclusion
 
-We have made one type of API using the gRPC concept, of course, there are many types of API that we haven’t implemented with the gRPC concept, you can see the complete code for this article on my [**GitHub account](https://github.com/bangadam/grpc-go)**, that’s all from me, don’t forget to claps and share this article if it’s useful for you.
+We have made one type of API using the gRPC concept, of course, there are many types of API that we haven’t implemented with the gRPC concept, you can see the complete code for this article on my [\*\*GitHub account](https://github.com/bangadam/grpc-go)\*\*, that’s all from me, don’t forget to claps and share this article if it’s useful for you.
 
 ## Thanks For Reading!
 

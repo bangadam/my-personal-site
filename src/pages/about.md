@@ -3,7 +3,7 @@ layout: ../layouts/AboutLayout.astro
 title: "About"
 ---
 
-Hi, my name is Muhammad Adam and I am a Fullstack Web Developer with +5 years of experience. I specialize in using Golang, PHP, Vuejs, and PostgreSQL to create robust and scalable web applications. My expertise lies in developing responsive and intuitive user interfaces, building APIs, and designing databases.
+Hi, my name is Muhammad Meganata Adam and I am a Fullstack Web Developer with +5 years of experience. I specialize in using Golang, PHP, Vuejs, and PostgreSQL to create robust and scalable web applications. My expertise lies in developing responsive and intuitive user interfaces, building APIs, and designing databases.
 
 ## Tech Stack
 

@@ -1,5 +1,5 @@
 ---
-author: Muhammad Adam
+author: Muhammad Meganata Adam
 pubDatetime: 2023-03-03T05:00:00Z
 title: How to build a blog website fast with Laravel 8 + Strapi?
 postSlug: how-to-build-a-blog-website-fast-with-laravel-8-strapi

@@ -2,9 +2,9 @@ import type { Site, SkillObjects, SocialObjects } from "./types";
 
 export const SITE: Site = {
   website: "https://astro-paper.pages.dev/", // replace this with your deployed domain
-  author: "Muhammad Adam",
+  author: "Muhammad Meganata Adam",
   desc: "My personal blog build with Astro",
-  title: "Muhammad Adam",
+  title: "Muhammad Meganata Adam",
   ogImage: "",
   lightAndDarkMode: true,
   postPerPage: 3,

@@ -1,5 +1,5 @@
 ---
-author: Muhammad Adam
+author: Muhammad Meganata Adam
 pubDatetime: 2023-06-10T05:00:00Z
 title: How to build a calculator app using React Native A Step-by-Step Tutorial
 postSlug: how-to-build-a-calculator-app-using-react-native-a-step-by-step-tutorial

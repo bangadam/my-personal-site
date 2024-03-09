@@ -1,5 +1,5 @@
 ---
-author: Muhammad Adam
+author: Muhammad Meganata Adam
 pubDatetime: 2023-08-02T05:00:00Z
 title: Easily Build a Modern Job Listing Website with React, Vite, and Tailwind CSS
 postSlug: easily-build-a-modern-job-listing-website-with-react-vite-and-tailwind-css

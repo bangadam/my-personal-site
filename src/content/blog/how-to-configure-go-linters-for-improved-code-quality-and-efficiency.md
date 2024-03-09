@@ -1,5 +1,5 @@
 ---
-author: Muhammad Adam
+author: Muhammad Meganata Adam
 pubDatetime: 2024-03-09T11:17:19Z
 title: How to Configure Go Linters for Improved Code Quality and Efficiency
 postSlug: how-to-configure-go-linters-for-improved-code-quality-and-efficiency

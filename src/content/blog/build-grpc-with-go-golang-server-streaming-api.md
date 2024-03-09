@@ -1,5 +1,5 @@
 ---
-author: Muhammad Adam
+author: Muhammad Meganata Adam
 pubDatetime: 2023-04-02T05:00:00Z
 title: Build gRPC with Go (golang) Server Streaming API
 postSlug: build-grpc-with-go-golang-server-streaming-api
@@ -26,32 +26,37 @@ Previously, we discussed the gRPC Unary API, you can check it at this [link](htt
 
 ![](https://cdn-images-1.medium.com/max/2880/0*zTedrqEAZxUGh-Jr.png)
 
-* Server Streaming RPC API is a new kind of API enabled thanks to [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2).
+- Server Streaming RPC API is a new kind of API enabled thanks to [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2).
 
-* The client will send one message to the server and will receive many responses from the server, possibly an infinite number.
+- The client will send one message to the server and will receive many responses from the server, possibly an infinite number.
 
-* Streaming servers are well suited for :
+- Streaming servers are well suited for :
 
-* When the server needs to send a lot of data (big data)
+- When the server needs to send a lot of data (big data)
 
-* When the server needs to **PUSH **data to the client without having the client request for more (think live feed, chat, etc).
+- When the server needs to **PUSH **data to the client without having the client request for more (think live feed, chat, etc).
 
 ## Step 1: Setup Project
 
 the first step is to install the protoc gen go library as a library that will help you create gRPC, run the command below:
+
 ```bash
     $ go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.26
     $ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
 ```
+
 After that update the PATH on your computer by running the command below:
+
 ```bash
     $ export PATH="$PATH:**$(**go env GOPATH**)**/bin"
 ```
+
 ## Step 2: Create Proto File
 
 In the second step, of course, we will create the proto file, then we first define the contents of the request and response, then don’t forget to add the name of the service. You can see in the code below:
+
 ```go
-syntax = "proto3"; 
+syntax = "proto3";
 
 package greet;
 option go_package = "greet/greetpb";
@@ -80,9 +85,11 @@ view rawgreet.proto hosted with ❤ by GitHub
 ```
 
 After creating the proton file, we will generate the file into a gRPC file using the command below:
+
 ```bash
     $ protoc greet/greetpb/greet.proto — go_out=plugins=grpc:.
 ```
+
 when we run the command, the gRPC file will automatically be created as shown below:
 
 ![](https://cdn-images-1.medium.com/max/2000/0*SBiJ7ZAp5jEZn9Lq.png)
@@ -90,6 +97,7 @@ when we run the command, the gRPC file will automatically be created as shown be
 ## Step 3: Create Server File
 
 After we create the proton file, the next step is to create a server file which I put in the **greet_server/server.go** folder, here is the code for the server:
+
 ```go
 
 package main
@@ -213,7 +221,7 @@ In the last step, we will try to run the two files, namely the server and client
 
 ## Conclusion
 
-We have made one type of API using the gRPC concept, of course, there are many types of API that we haven’t implemented with the gRPC concept, you can see the complete code for this article on my [**GitHub account](https://github.com/bangadam/grpc-go)**, that’s all from me, don’t forget to claps and share this article if it’s useful for you.
+We have made one type of API using the gRPC concept, of course, there are many types of API that we haven’t implemented with the gRPC concept, you can see the complete code for this article on my [\*\*GitHub account](https://github.com/bangadam/grpc-go)\*\*, that’s all from me, don’t forget to claps and share this article if it’s useful for you.
 
 ## Thanks For Reading!
 
