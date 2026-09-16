@@ -1,36 +1,35 @@
-import { slugifyStr } from "@utils/slugify";
 import Datetime from "./Datetime";
-import type { CollectionEntry } from "astro:content";
 
 export interface Props {
   href?: string;
-  frontmatter: CollectionEntry<"blog">["data"];
-  secHeading?: boolean;
+  frontmatter: {
+    title: string;
+    pubDatetime: string | Date;
+    description: string;
+  };
 }
 
-export default function Project({ href, frontmatter, secHeading = true }: Props) {
+export default function Project({ href, frontmatter }: Props) {
   const { title, pubDatetime, description } = frontmatter;
 
-  const headerProps = {
-    style: { viewTransitionName: slugifyStr(title) },
-    className: "text-lg font-medium decoration-dashed hover:underline",
-  };
-
   return (
-    <div className="my-6">
+    <article className="row-hover rounded-md border border-[var(--border)] bg-[var(--card)] p-5">
       <a
         href={href}
         target="_blank"
-        className="inline-block text-lg font-medium text-skin-accent decoration-dashed underline-offset-4 focus-visible:no-underline focus-visible:underline-offset-0"
+        rel="noopener noreferrer"
+        className="block"
       >
-        {secHeading ? (
-          <h2 {...headerProps}>{title}</h2>
-        ) : (
-          <h3 {...headerProps}>{title}</h3>
-        )}
+        <h2 className="text-[15.5px] font-medium tracking-tight text-[var(--foreground)]">
+          {title}
+        </h2>
+        <div className="mt-1">
+          <Datetime datetime={pubDatetime} />
+        </div>
+        <p className="mt-3 text-[14px] leading-[1.6] text-[var(--muted-foreground)]">
+          {description}
+        </p>
       </a>
-      <Datetime datetime={pubDatetime} />
-      <p>{description}</p>
-    </div>
+    </article>
   );
 }

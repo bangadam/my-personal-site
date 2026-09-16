@@ -1,0 +1,424 @@
+---
+import { Mail } from "lucide-react";
+import Socials from "@components/Socials.astro";
+
+type Contribution = {
+  date: string;
+  count: number;
+  level: number;
+};
+
+type ContributionResponse = {
+  contributions: Contribution[];
+};
+
+type Role = {
+  company: string;
+  role: string;
+  period: string;
+  location: string;
+  bullets?: string[];
+  tags?: string[];
+};
+
+const roles: Role[] = [
+  {
+    company: "Motocle, Inc.",
+    role: "Full-stack Developer (Freelance)",
+    period: "Apr 2025 - Present",
+    location: "Fukuoka, Japan (Remote)",
+    bullets: [
+      "Built new booking and customer-registration features for a veterinary-clinic system, streamlining appointment scheduling and client onboarding.",
+      "Integrated the Smaregi Point of Sale system to unify in-clinic transactions with the platform.",
+      "Implemented a Retrieval-Augmented Generation feature to surface relevant clinical information from clinic data.",
+      "Diagnosed and fixed bugs across the clinic system, improving stability and reliability.",
+    ],
+    tags: ["Smaregi POS", "RAG", "Booking"],
+  },
+  {
+    company: "PT Kreatif Transportasi Gemilang (Get And Ride)",
+    role: "Senior Software Engineer",
+    period: "Nov 2023 - Present",
+    location: "Jakarta, Indonesia",
+    bullets: [
+      "Developed a real-time chat API service for web and mobile applications using WebSocket and Redis, enhancing user engagement.",
+      "Implemented a secure payment feature using the Midtrans payment gateway, streamlining product transactions and driving revenue growth.",
+      "Developed a comprehensive voucher system that streamlined payments and significantly increased sales conversion rates.",
+      "Engineered a new driver platform for order task management, earnings tracking, and profile administration.",
+      "Designed and implemented a new airport shuttle service connecting airports to city destinations, expanding service offerings.",
+      "Resolved critical timezone synchronization issues so users receive accurate times based on their location.",
+    ],
+    tags: ["WebSocket", "Redis", "Midtrans"],
+  },
+  {
+    company: "ASABA INNOTECH",
+    role: "Senior Full Stack Engineer",
+    period: "Nov 2022 - Jul 2024",
+    location: "Jakarta, Indonesia",
+    bullets: [
+      "Developed and deployed an Omni Channel Order Management System (OMS) that streamlined order processing.",
+      "Engineered a robust Sales Force Automation platform (SFA) that enhanced field sales operations and team productivity.",
+      "Designed and implemented a centralized notification system for internal projects across multiple platforms.",
+      "Built a data integration service that synchronizes critical business data from SAP to internal applications.",
+    ],
+    tags: ["OMS", "SFA", "SAP"],
+  },
+  {
+    company: "KB Finansia Multi Finance",
+    role: "Backend Engineer",
+    period: "May 2022 - Nov 2022",
+    location: "Jakarta, Indonesia",
+    bullets: ["Developed the B2B API project \"Join Finance\"."],
+    tags: ["REST API", "B2B"],
+  },
+  {
+    company: "PT Alfath Technologi Kreatif",
+    role: "Full Stack Developer (Contract)",
+    period: "Feb 2022 - Apr 2022",
+    location: "Malang, Indonesia",
+    bullets: [
+      "Built a Point of Sale application for PT SMI GROUP using Laravel, optimising queries and database indexing for performance. Used by roughly 50 outlets across Indonesia.",
+    ],
+    tags: ["Laravel", "POS"],
+  },
+  {
+    company: "Esteh Creative",
+    role: "Full Stack Developer (Contract)",
+    period: "Dec 2021 - Apr 2022",
+    location: "Malang, Indonesia",
+    bullets: [
+      "Integrated the Finpay Emoney payment system into an e-commerce website for seamless, secure transactions.",
+      "Refactored legacy code and optimised data queries, making the application 30% faster and easier to maintain.",
+    ],
+    tags: ["Finpay", "E-commerce"],
+  },
+  {
+    company: "PT Datamax Teknologi Internasional",
+    role: "Back End Developer",
+    period: "Apr 2021 - Dec 2021",
+    location: "Malang, Indonesia",
+    bullets: [
+      "Migrated the backend from PHP to Golang, improving application performance by 50%.",
+      "Integrated delivery services using Gosend, JNT, and JNE, adding 500 new users.",
+    ],
+    tags: ["Go", "Delivery APIs"],
+  },
+  {
+    company: "Remote Worker Indonesia",
+    role: "Backend Developer (Contract)",
+    period: "Sep 2021 - Oct 2021",
+    location: "Yogyakarta, Indonesia",
+    bullets: [
+      "Built the REST API and admin dashboard for the mobile app of PUSAT PELATIHAN PERTANIAN BPPSDMP - KEMENTAN.",
+    ],
+    tags: ["REST API", "Dashboard"],
+  },
+  {
+    company: "PT. Ergossum Sukses Makmur",
+    role: "Full-stack Developer",
+    period: "Aug 2020 - Feb 2021",
+    location: "Malang, Indonesia",
+    bullets: [
+      "Doolen: API creation, frontend integration, and Xendit payment gateway integration for a cooking-ingredients e-commerce website.",
+      "Esusmart: API creation, frontend integration, and Xendit payment gateway integration for a cooking-ingredients e-commerce website.",
+      "Froya: API creation and frontend integration for a processed-chicken e-commerce website.",
+    ],
+    tags: ["Laravel", "Xendit", "E-commerce"],
+  },
+];
+
+const skills = [
+  ["Languages", ["Go", "PHP", "JavaScript", "TypeScript", "Python"]],
+  ["Backend", ["Microservices", "RESTful & gRPC APIs", "PostgreSQL", "MongoDB", "Redis", "WebSocket", "Elasticsearch"]],
+  ["Frontend", ["Vue", "React", "Tailwind CSS"]],
+] as const;
+
+const work = [
+  ["Get And Ride Platform", "2023 - Present", "Real-time chat (WebSocket + Redis), Midtrans payment gateway, voucher system, driver service, and airport transfer service."],
+  ["Omni Channel OMS & SFA", "2022 - 2024", "Order management and sales force automation for field teams, with a notification service and SAP ETL pipeline."],
+  ["Pasarin.id Marketplace", "2021", "Service APIs for product, transaction, backoffice, and chat. Third-party delivery, Elasticsearch, and KONG API gateway."],
+  ["Doolen · Esusmart · Froya", "2020 - 2021", "Three e-commerce platforms. Owned API creation, frontend integration, and Xendit payment gateway integration."],
+] as const;
+
+let contributions: Contribution[] = [];
+
+try {
+  const response = await fetch(
+    "https://github-contributions-api.jogruber.de/v4/bangadam?y=last"
+  );
+  if (response.ok) {
+    const data = (await response.json()) as ContributionResponse;
+    contributions = data.contributions
+      .sort((a, b) => a.date.localeCompare(b.date))
+      .slice(-365);
+  }
+} catch {
+  contributions = [];
+}
+
+const latestContributionDate = contributions.at(-1)?.date ?? "";
+const latestMonth = latestContributionDate.slice(0, 7);
+const latestYear = latestContributionDate.slice(0, 4);
+const monthlyContributions = contributions
+  .filter((day) => day.date.startsWith(latestMonth))
+  .reduce((total, day) => total + day.count, 0);
+const yearlyContributions = contributions
+  .filter((day) => day.date.startsWith(latestYear))
+  .reduce((total, day) => total + day.count, 0);
+const latestMonthLabel = latestContributionDate
+  ? new Intl.DateTimeFormat("en", { month: "long" }).format(
+      new Date(`${latestContributionDate}T00:00:00Z`)
+    )
+  : "This month";
+
+const firstWeekday = contributions.length
+  ? new Date(`${contributions[0].date}T00:00:00Z`).getUTCDay()
+  : 0;
+const paddedDays: Array<Contribution | null> = [
+  ...Array.from({ length: firstWeekday }, () => null),
+  ...contributions,
+];
+const weeks = Array.from(
+  { length: Math.ceil(paddedDays.length / 7) },
+  (_, index) => paddedDays.slice(index * 7, index * 7 + 7)
+);
+---
+
+<section class="pt-12 pb-10 sm:pt-20 sm:pb-14">
+  <div class="flex items-center gap-4">
+    <img
+      src="/avatar.png"
+      alt="Muhammad Meganata Adam"
+      width="64"
+      height="64"
+      loading="eager"
+      class="h-16 w-16 rounded-full border border-[var(--border)] object-cover"
+    />
+    <div>
+      <h1 class="text-[28px] font-semibold leading-tight tracking-[-0.02em] text-[var(--foreground)] sm:text-[34px]">
+        Hi there! I'm Adam.
+      </h1>
+      <p class="mt-0.5 text-[13px] text-[var(--muted-foreground)]">
+        Software Engineer · Jakarta, Indonesia
+      </p>
+    </div>
+  </div>
+  <div class="mt-7 space-y-5">
+    <p class="max-w-xl text-[17px] leading-[1.6] text-[var(--hero-fg)] sm:text-[18px]">
+      Fullstack Developer with skills in PHP, Golang, and JavaScript. I am
+      passionate about technology and enjoy challenging myself to learn new
+      skills and stay current in the field. I also share my knowledge and
+      insights through writing articles on technology.
+    </p>
+    <Socials />
+  </div>
+</section>
+
+<section class="py-6 sm:py-8">
+  <div class="mb-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+    <h2 class="section-label mb-0">GitHub Contributions</h2>
+    {
+      contributions.length > 0 && (
+        <p class="font-mono text-[11.5px] text-[var(--muted-foreground)]">
+          {latestMonthLabel}: {monthlyContributions.toLocaleString()} · {latestYear}: {yearlyContributions.toLocaleString()}
+        </p>
+      )
+    }
+  </div>
+  {
+    contributions.length > 0 ? (
+      <a
+        href="https://github.com/bangadam"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="github-chart block rounded-md border border-[var(--border)] bg-[var(--card)] p-3"
+        title="Open bangadam's GitHub profile"
+      >
+        <div class="gh-grid" aria-label="GitHub contribution chart">
+          {
+            weeks.map((week) =>
+              week.map((day) =>
+                day ? (
+                  <span
+                    class={`gh-cell gh-level-${day.level}`}
+                    title={`${day.date}: ${day.count} contribution${day.count === 1 ? "" : "s"}`}
+                    aria-label={`${day.date}: ${day.count} contribution${day.count === 1 ? "" : "s"}`}
+                  ></span>
+                ) : (
+                  <span class="gh-cell gh-empty" aria-hidden="true"></span>
+                )
+              )
+            )
+          }
+        </div>
+      </a>
+    ) : (
+      <a
+        href="https://github.com/bangadam"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="link-underline text-[13px] text-[var(--muted-foreground)]"
+      >
+        View GitHub activity
+      </a>
+    )
+  }
+</section>
+
+<section class="py-10 sm:py-14">
+  <h2 class="section-label">Experience</h2>
+  <div class="-mx-3">
+    {
+      roles.map((role) => (
+        <article class="row-hover border-b border-[var(--border)] px-3 py-4 last:border-b-0">
+          <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
+            <span class="w-28 shrink-0 font-mono text-[12px] text-[var(--muted-foreground)]">
+              {role.period}
+            </span>
+            <div class="min-w-0 flex-1">
+              <h3 class="text-[15px] font-medium text-[var(--foreground)]">
+                {role.role}
+                <span class="font-normal text-[var(--muted-foreground)]"> · {role.company}</span>
+              </h3>
+              <p class="mt-0.5 font-mono text-[12px] text-[var(--muted-foreground)]">
+                {role.location}
+              </p>
+              {
+                role.bullets && (
+                  <ul class="mt-2 list-disc space-y-1 pl-4 text-[14px] leading-[1.6] text-[var(--muted-foreground)] marker:text-[var(--border)]">
+                    {role.bullets.map((bullet) => <li>{bullet}</li>)}
+                  </ul>
+                )
+              }
+              {
+                role.tags && (
+                  <div class="mt-2 flex flex-wrap gap-1.5">
+                    {role.tags.map((tag) => <span class="chip">{tag}</span>)}
+                  </div>
+                )
+              }
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<section class="py-10 sm:py-14">
+  <h2 class="section-label">Skills</h2>
+  <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+    {
+      skills.map(([category, values]) => (
+        <div class="space-y-2.5">
+          <div class="font-mono text-[12.5px] uppercase tracking-wider text-[var(--muted-foreground)]">
+            {category}
+          </div>
+          <div class="flex flex-wrap gap-1.5">
+            {values.map((skill) => <span class="chip text-[12px]">{skill}</span>)}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<section class="py-10 sm:py-14">
+  <h2 class="section-label">Selected Work</h2>
+  <div class="-mx-3">
+    {
+      work.map(([title, year, description]) => (
+        <div class="row-hover border-b border-[var(--border)] px-3 py-4 last:border-b-0">
+          <div class="flex items-baseline justify-between gap-4">
+            <h3 class="min-w-0 text-[15px] font-medium tracking-tight text-[var(--foreground)]">
+              {title}
+            </h3>
+            <span class="shrink-0 font-mono text-[12px] text-[var(--muted-foreground)]">
+              {year}
+            </span>
+          </div>
+          <p class="mt-1 text-[14px] leading-[1.6] text-[var(--muted-foreground)]">
+            {description}
+          </p>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<section class="pt-12 pb-10 sm:pt-16 sm:pb-12">
+  <div class="space-y-4">
+    <h2 class="section-label">Get in touch</h2>
+    <p class="max-w-md text-[16px] leading-[1.6] text-[var(--foreground-90)]">
+      Open to senior and staff roles, backend-heavy or full-stack. Available for
+      selective contract work. Best reached by email.
+    </p>
+    <a
+      href="mailto:bangadam.dev@gmail.com"
+      class="group inline-flex items-center gap-1.5 text-[15px] font-medium text-[var(--foreground)]"
+    >
+      <Mail className="h-4 w-4" strokeWidth={1.75} />
+      <span class="link-underline">bangadam.dev@gmail.com</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .section-label {
+    @apply text-[12px] font-medium uppercase tracking-[0.12em] text-[var(--muted-foreground)];
+  }
+
+  .chip {
+    @apply inline-flex items-center rounded-md border border-[var(--border)] bg-[var(--muted-40)] px-2 py-0.5 font-mono text-[11.5px] text-[var(--muted-foreground)] transition-colors hover:border-[var(--foreground-30)] hover:text-[var(--foreground)];
+  }
+  .gh-grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(7, 1fr);
+    grid-auto-columns: 1fr;
+    gap: 2px;
+    width: 100%;
+    aspect-ratio: 53 / 7;
+  }
+
+  .gh-cell {
+    border-radius: 2px;
+    transition: transform 120ms ease, outline-color 120ms ease;
+  }
+
+  .gh-cell:hover {
+    outline: 1px solid var(--foreground);
+    outline-offset: 1px;
+    transform: scale(1.25);
+  }
+
+  .gh-empty,
+  .gh-level-0 {
+    background: var(--muted);
+  }
+
+  .gh-level-1 { background: #c9c9c9; }
+  .gh-level-2 { background: #9a9a9a; }
+  .gh-level-3 { background: #5c5c5c; }
+  .gh-level-4 { background: #1f1f1f; }
+
+  :global(.dark) .gh-empty,
+  :global(.dark) .gh-level-0 {
+    background: #1a1a1a;
+  }
+
+  :global(.dark) .gh-level-1 { background: #3a3a3a; }
+  :global(.dark) .gh-level-2 { background: #6b6b6b; }
+  :global(.dark) .gh-level-3 { background: #a8a8a8; }
+  :global(.dark) .gh-level-4 { background: #e5e5e5; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gh-cell {
+      transition: none;
+    }
+
+    .gh-cell:hover {
+      transform: none;
+    }
+  }
+</style>

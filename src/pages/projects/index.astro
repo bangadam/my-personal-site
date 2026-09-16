@@ -1,12 +1,12 @@
 ---
-import { SITE } from "@config";
-import getSortedPosts from "@utils/getSortedPosts";
-import getPageNumbers from "@utils/getPageNumbers";
-
 import { getCollection } from "astro:content";
 import Projects from "@layouts/Projects.astro";
 
-const projects = await getCollection("project");
+const projects = (await getCollection("project"))
+  .filter(({ data }) => !data.draft)
+  .sort(
+    (a, b) => b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf()
+  );
 ---
 
 <Projects projects={projects} />

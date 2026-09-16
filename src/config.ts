@@ -140,4 +140,10 @@ export const SOCIALS: SocialObjects = [
     linkTitle: `${SITE.title} on Mastodon`,
     active: false,
   },
+  {
+    name: "Upwork",
+    href: "https://www.upwork.com/freelancers/~013b91ad78555b9402",
+    linkTitle: `${SITE.title} on Upwork`,
+    active: true,
+  },
 ];

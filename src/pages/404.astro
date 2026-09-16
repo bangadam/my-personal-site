@@ -1,42 +1,32 @@
 ---
-import { SITE } from "@config";
 import Layout from "@layouts/Layout.astro";
-import Header from "@components/Header.astro";
-import Footer from "@components/Footer.astro";
-import LinkButton from "@components/LinkButton.astro";
 ---
 
-<Layout title={`404 Not Found | ${SITE.title}`}>
-  <Header />
-
-  <main id="main-content">
-    <div class="not-found-wrapper">
-      <h1 aria-label="404 Not Found">404</h1>
-      <span aria-hidden="true">¯\_(ツ)_/¯</span>
-      <p>Page Not Found</p>
-      <LinkButton
-        href="/"
-        className="my-6 underline decoration-dashed underline-offset-8 text-lg"
-      >
-        Go back home
-      </LinkButton>
+<Layout title="404 - Adam" description="Page not found.">
+  <section class="flex min-h-[60vh] flex-col items-start justify-center gap-6 pt-12 pb-16">
+    <div class="font-mono text-[12px] uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
+      Error 404
     </div>
-  </main>
-
-  <Footer />
+    <h1 class="text-[36px] font-semibold leading-[1.05] tracking-[-0.025em] text-[var(--foreground)] sm:text-[48px]">
+      Lost in the stack trace.
+    </h1>
+    <p class="max-w-md text-[16px] leading-[1.6] text-[var(--muted-foreground)]">
+      Whatever you were looking for is not here. Could be a broken link, could be a
+      typo. Either way, the back button is your friend.
+    </p>
+    <pre
+      class="overflow-x-auto rounded-md border border-[var(--border)] bg-[var(--card)] p-4 font-mono text-[12px] leading-[1.4] text-[var(--muted-foreground)]"
+    >{`> curl -I {url}
+HTTP/1.1 404 Not Found
+x-powered-by: Cloudflare
+content-type: text/html; charset=utf-8
+> _
+`}</pre>
+    <a
+      href="/"
+      class="link-underline inline-flex items-center gap-1 text-[15px] font-medium text-[var(--foreground)]"
+    >
+      Back to home <span aria-hidden="true">&rarr;</span>
+    </a>
+  </section>
 </Layout>
-
-<style>
-  #main-content {
-    @apply mx-auto flex max-w-3xl flex-1 items-center justify-center;
-  }
-  .not-found-wrapper {
-    @apply mb-14 flex flex-col items-center justify-center;
-  }
-  .not-found-wrapper h1 {
-    @apply text-9xl font-bold text-skin-accent;
-  }
-  .not-found-wrapper p {
-    @apply mt-4 text-2xl sm:text-3xl;
-  }
-</style>

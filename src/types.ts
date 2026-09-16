@@ -39,7 +39,8 @@ export type SocialMedia =
   | "Skype"
   | "Steam"
   | "Telegram"
-  | "Mastodon";
+  | "Mastodon"
+  | "Upwork";
 
 // SKILLS config
 export type SkillObjects = {
