@@ -133,13 +133,6 @@ const skills = [
   ["Frontend", ["Vue", "React", "Tailwind CSS"]],
 ] as const;
 
-const work = [
-  ["Get And Ride Platform", "2023 - Present", "Real-time chat (WebSocket + Redis), Midtrans payment gateway, voucher system, driver service, and airport transfer service."],
-  ["Omni Channel OMS & SFA", "2022 - 2024", "Order management and sales force automation for field teams, with a notification service and SAP ETL pipeline."],
-  ["Pasarin.id Marketplace", "2021", "Service APIs for product, transaction, backoffice, and chat. Third-party delivery, Elasticsearch, and KONG API gateway."],
-  ["Doolen · Esusmart · Froya", "2020 - 2021", "Three e-commerce platforms. Owned API creation, frontend integration, and Xendit payment gateway integration."],
-] as const;
-
 let contributions: Contribution[] = [];
 
 try {
@@ -317,29 +310,6 @@ const weeks = Array.from(
           <div class="flex flex-wrap gap-1.5">
             {values.map((skill) => <span class="chip text-[12px]">{skill}</span>)}
           </div>
-        </div>
-      ))
-    }
-  </div>
-</section>
-
-<section class="py-10 sm:py-14">
-  <h2 class="section-label">Selected Work</h2>
-  <div class="-mx-3">
-    {
-      work.map(([title, year, description]) => (
-        <div class="row-hover border-b border-[var(--border)] px-3 py-4 last:border-b-0">
-          <div class="flex items-baseline justify-between gap-4">
-            <h3 class="min-w-0 text-[15px] font-medium tracking-tight text-[var(--foreground)]">
-              {title}
-            </h3>
-            <span class="shrink-0 font-mono text-[12px] text-[var(--muted-foreground)]">
-              {year}
-            </span>
-          </div>
-          <p class="mt-1 text-[14px] leading-[1.6] text-[var(--muted-foreground)]">
-            {description}
-          </p>
         </div>
       ))
     }
