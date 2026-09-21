@@ -9,6 +9,7 @@ import {
   Mail,
   Network,
   Plug,
+  MessageCircle,
   ShieldCheck,
 } from "lucide-react";
 import Socials from "@components/Socials.astro";
@@ -491,16 +492,27 @@ const weeks = Array.from(
     <h2 class="section-label">Get in touch</h2>
     <p class="max-w-md text-[16px] leading-[1.6] text-[var(--foreground-90)]">
       I am currently open to senior and staff roles, backend-heavy or
-      full-stack. For hiring or project inquiries, email is the fastest way to
-      reach me.
+      full-stack. For hiring or project inquiries, reach me by email or
+      WhatsApp.
     </p>
-    <a
-      href="mailto:bangadam.dev@gmail.com"
-      class="group inline-flex items-center gap-1.5 text-[15px] font-medium text-[var(--foreground)]"
-    >
-      <Mail className="h-4 w-4" strokeWidth={1.75} />
-      <span class="link-underline">bangadam.dev@gmail.com</span>
-    </a>
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+      <a
+        href="mailto:bangadam.dev@gmail.com"
+        class="group inline-flex items-center gap-1.5 text-[15px] font-medium text-[var(--foreground)]"
+      >
+        <Mail className="h-4 w-4" strokeWidth={1.75} />
+        <span class="link-underline">bangadam.dev@gmail.com</span>
+      </a>
+      <a
+        href="https://wa.me/6285732276465"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="group inline-flex items-center gap-1.5 text-[15px] font-medium text-[var(--foreground)]"
+      >
+        <MessageCircle className="h-4 w-4" strokeWidth={1.75} />
+        <span class="link-underline">+62 857 3227 6465</span>
+      </a>
+    </div>
   </div>
 </section>
 
