@@ -1,6 +1,6 @@
 ---
 import { SOCIALS } from "@config";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, Mail, MessageCircle } from "lucide-react";
 
 export interface Props {
   compact?: boolean;
@@ -11,9 +11,11 @@ const { compact = false, centered = false } = Astro.props;
 const socials = SOCIALS.filter(({ active }) => active);
 ---
 
-<div class:list={["social-links", compact && "compact", centered && "centered"]}>
+<div
+  class:list={["social-links", compact && "compact", centered && "centered"]}
+>
   {
-    socials.map((social) => (
+    socials.map(social => (
       <a
         href={social.href}
         target="_blank"
@@ -22,9 +24,18 @@ const socials = SOCIALS.filter(({ active }) => active);
         class="social-link link-underline transition-colors hover:text-[var(--foreground)]"
       >
         <span class="social-icon">
-          {social.name === "Github" && <Github className="h-3.5 w-3.5" strokeWidth={1.75} />}
-          {social.name === "LinkedIn" && <Linkedin className="h-3.5 w-3.5" strokeWidth={1.75} />}
-          {social.name === "Mail" && <Mail className="h-3.5 w-3.5" strokeWidth={1.75} />}
+          {social.name === "Github" && (
+            <Github className="h-3.5 w-3.5" strokeWidth={1.75} />
+          )}
+          {social.name === "LinkedIn" && (
+            <Linkedin className="h-3.5 w-3.5" strokeWidth={1.75} />
+          )}
+          {social.name === "Mail" && (
+            <Mail className="h-3.5 w-3.5" strokeWidth={1.75} />
+          )}
+          {social.name === "WhatsApp" && (
+            <MessageCircle className="h-3.5 w-3.5" strokeWidth={1.75} />
+          )}
           {social.name === "Upwork" && (
             <svg
               viewBox="0 0 24 24"
