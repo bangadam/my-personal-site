@@ -1,5 +1,16 @@
 ---
-import { Mail } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import {
+  Bot,
+  Cloud,
+  Database,
+  Languages,
+  Layers,
+  Mail,
+  Network,
+  Plug,
+  ShieldCheck,
+} from "lucide-react";
 import Socials from "@components/Socials.astro";
 
 type Contribution = {
@@ -68,7 +79,7 @@ const roles: Role[] = [
     role: "Backend Engineer",
     period: "May 2022 - Nov 2022",
     location: "Jakarta, Indonesia",
-    bullets: ["Developed the B2B API project \"Join Finance\"."],
+    bullets: ['Developed the B2B API project "Join Finance".'],
     tags: ["REST API", "B2B"],
   },
   {
@@ -127,14 +138,105 @@ const roles: Role[] = [
   },
 ];
 
-const skills = [
-  ["Languages", ["Go", "PHP", "JavaScript", "TypeScript", "Python"]],
-  ["Backend", ["Microservices", "RESTful & gRPC APIs", "PostgreSQL", "MongoDB", "Redis", "WebSocket", "Elasticsearch"]],
-  ["Frontend", ["Vue", "React", "Tailwind CSS"]],
-] as const;
+type SkillLevel = "Expert" | "Advanced";
+
+type SkillGroup = {
+  title: string;
+  icon: LucideIcon;
+  skills: Array<{ name: string; level: SkillLevel }>;
+};
+
+const skillGroups: SkillGroup[] = [
+  {
+    title: "Languages",
+    icon: Languages,
+    skills: [
+      { name: "PHP", level: "Expert" },
+      { name: "JavaScript / TypeScript", level: "Expert" },
+      { name: "SQL", level: "Expert" },
+      { name: "Python", level: "Advanced" },
+    ],
+  },
+  {
+    title: "Frameworks",
+    icon: Layers,
+    skills: [
+      { name: "Laravel / Lumen", level: "Expert" },
+      { name: "NestJS", level: "Expert" },
+      { name: "ExpressJS / Fastify", level: "Expert" },
+      { name: "ElysiaJS", level: "Advanced" },
+      { name: ".NET", level: "Advanced" },
+    ],
+  },
+  {
+    title: "Databases & Caching",
+    icon: Database,
+    skills: [
+      { name: "PostgreSQL", level: "Expert" },
+      { name: "MySQL", level: "Expert" },
+      { name: "Redis", level: "Expert" },
+      { name: "MongoDB", level: "Advanced" },
+      { name: "Firebase Firestore", level: "Advanced" },
+    ],
+  },
+  {
+    title: "API & Architecture",
+    icon: Network,
+    skills: [
+      { name: "REST API design", level: "Expert" },
+      { name: "Swagger / OpenAPI", level: "Expert" },
+      { name: "GraphQL", level: "Advanced" },
+      { name: "gRPC", level: "Advanced" },
+      { name: "Semi-microservices, multi-tenant", level: "Advanced" },
+    ],
+  },
+  {
+    title: "AI & Agents",
+    icon: Bot,
+    skills: [
+      { name: "MCP (Model Context Protocol)", level: "Expert" },
+      { name: "AI agents & agentic workflows", level: "Expert" },
+      { name: "LLM integration (OpenAI, Anthropic)", level: "Advanced" },
+      { name: "RAG", level: "Advanced" },
+    ],
+  },
+  {
+    title: "Integrations",
+    icon: Plug,
+    skills: [
+      { name: "Payments: Xendit, Midtrans, Stripe, IPay88", level: "Expert" },
+      { name: "Messaging: Twilio, WhatsApp API", level: "Expert" },
+      { name: "Email: Brevo, MailGun", level: "Expert" },
+      { name: "Logistics: JNE, Google Maps API", level: "Advanced" },
+      { name: "Realtime: Socket.IO, Firebase FCM", level: "Advanced" },
+    ],
+  },
+  {
+    title: "Cloud & DevOps",
+    icon: Cloud,
+    skills: [
+      { name: "Docker", level: "Advanced" },
+      { name: "Git (GitHub, Bitbucket)", level: "Expert" },
+      { name: "GitHub Actions", level: "Advanced" },
+      { name: "AWS (S3, SQS)", level: "Advanced" },
+      { name: "NGINX", level: "Advanced" },
+      { name: "Laravel Vapor", level: "Advanced" },
+    ],
+  },
+  {
+    title: "Auth & Quality",
+    icon: ShieldCheck,
+    skills: [
+      { name: "OAuth2 / OIDC single sign-on", level: "Expert" },
+      { name: "MFA and OTP delivery", level: "Expert" },
+      { name: "RBAC", level: "Expert" },
+      { name: "Query profiling & optimisation", level: "Expert" },
+      { name: "PHPUnit, unit testing", level: "Advanced" },
+    ],
+  },
+];
 
 let contributions: Contribution[] = [];
-
 try {
   const response = await fetch(
     "https://github-contributions-api.jogruber.de/v4/bangadam?y=last"
@@ -153,10 +255,10 @@ const latestContributionDate = contributions.at(-1)?.date ?? "";
 const latestMonth = latestContributionDate.slice(0, 7);
 const latestYear = latestContributionDate.slice(0, 4);
 const monthlyContributions = contributions
-  .filter((day) => day.date.startsWith(latestMonth))
+  .filter(day => day.date.startsWith(latestMonth))
   .reduce((total, day) => total + day.count, 0);
 const yearlyContributions = contributions
-  .filter((day) => day.date.startsWith(latestYear))
+  .filter(day => day.date.startsWith(latestYear))
   .reduce((total, day) => total + day.count, 0);
 const latestMonthLabel = latestContributionDate
   ? new Intl.DateTimeFormat("en", { month: "long" }).format(
@@ -177,7 +279,7 @@ const weeks = Array.from(
 );
 ---
 
-<section class="pt-12 pb-10 sm:pt-20 sm:pb-14">
+<section class="pb-10 pt-12 sm:pb-14 sm:pt-20">
   <div class="flex items-center gap-4">
     <img
       src="/avatar.png"
@@ -188,7 +290,9 @@ const weeks = Array.from(
       class="h-16 w-16 rounded-full border border-[var(--border)] object-cover"
     />
     <div>
-      <h1 class="text-[28px] font-semibold leading-tight tracking-[-0.02em] text-[var(--foreground)] sm:text-[34px]">
+      <h1
+        class="text-[28px] font-semibold leading-tight tracking-[-0.02em] text-[var(--foreground)] sm:text-[34px]"
+      >
         Hi there! I'm Adam.
       </h1>
       <p class="mt-0.5 text-[13px] text-[var(--muted-foreground)]">
@@ -197,7 +301,9 @@ const weeks = Array.from(
     </div>
   </div>
   <div class="mt-7 space-y-5">
-    <p class="max-w-xl text-[17px] leading-[1.6] text-[var(--hero-fg)] sm:text-[18px]">
+    <p
+      class="max-w-xl text-[17px] leading-[1.6] text-[var(--hero-fg)] sm:text-[18px]"
+    >
       Fullstack Developer with skills in PHP, Golang, and JavaScript. I am
       passionate about technology and enjoy challenging myself to learn new
       skills and stay current in the field. I also share my knowledge and
@@ -208,12 +314,15 @@ const weeks = Array.from(
 </section>
 
 <section class="py-6 sm:py-8">
-  <div class="mb-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+  <div
+    class="mb-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1"
+  >
     <h2 class="section-label mb-0">GitHub Contributions</h2>
     {
       contributions.length > 0 && (
         <p class="font-mono text-[11.5px] text-[var(--muted-foreground)]">
-          {latestMonthLabel}: {monthlyContributions.toLocaleString()} · {latestYear}: {yearlyContributions.toLocaleString()}
+          {latestMonthLabel}: {monthlyContributions.toLocaleString()} ·{" "}
+          {latestYear}: {yearlyContributions.toLocaleString()}
         </p>
       )
     }
@@ -228,21 +337,23 @@ const weeks = Array.from(
         title="Open bangadam's GitHub profile"
       >
         <div class="gh-grid" aria-label="GitHub contribution chart">
-          {
-            weeks.map((week) =>
-              week.map((day) =>
-                day ? (
-                  <span
-                    class={`gh-cell gh-level-${day.level}`}
-                    title={`${day.date}: ${day.count} contribution${day.count === 1 ? "" : "s"}`}
-                    aria-label={`${day.date}: ${day.count} contribution${day.count === 1 ? "" : "s"}`}
-                  ></span>
-                ) : (
-                  <span class="gh-cell gh-empty" aria-hidden="true"></span>
-                )
+          {weeks.map(week =>
+            week.map(day =>
+              day ? (
+                <span
+                  class={`gh-cell gh-level-${day.level}`}
+                  title={`${day.date}: ${day.count} contribution${
+                    day.count === 1 ? "" : "s"
+                  }`}
+                  aria-label={`${day.date}: ${day.count} contribution${
+                    day.count === 1 ? "" : "s"
+                  }`}
+                />
+              ) : (
+                <span class="gh-cell gh-empty" aria-hidden="true" />
               )
             )
-          }
+          )}
         </div>
       </a>
     ) : (
@@ -262,7 +373,7 @@ const weeks = Array.from(
   <h2 class="section-label">Experience</h2>
   <div class="-mx-3">
     {
-      roles.map((role) => (
+      roles.map(role => (
         <article class="row-hover border-b border-[var(--border)] px-3 py-4 last:border-b-0">
           <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
             <span class="w-28 shrink-0 font-mono text-[12px] text-[var(--muted-foreground)]">
@@ -271,25 +382,28 @@ const weeks = Array.from(
             <div class="min-w-0 flex-1">
               <h3 class="text-[15px] font-medium text-[var(--foreground)]">
                 {role.role}
-                <span class="font-normal text-[var(--muted-foreground)]"> · {role.company}</span>
+                <span class="font-normal text-[var(--muted-foreground)]">
+                  {" "}
+                  · {role.company}
+                </span>
               </h3>
               <p class="mt-0.5 font-mono text-[12px] text-[var(--muted-foreground)]">
                 {role.location}
               </p>
-              {
-                role.bullets && (
-                  <ul class="mt-2 list-disc space-y-1 pl-4 text-[14px] leading-[1.6] text-[var(--muted-foreground)] marker:text-[var(--border)]">
-                    {role.bullets.map((bullet) => <li>{bullet}</li>)}
-                  </ul>
-                )
-              }
-              {
-                role.tags && (
-                  <div class="mt-2 flex flex-wrap gap-1.5">
-                    {role.tags.map((tag) => <span class="chip">{tag}</span>)}
-                  </div>
-                )
-              }
+              {role.bullets && (
+                <ul class="mt-2 list-disc space-y-1 pl-4 text-[14px] leading-[1.6] text-[var(--muted-foreground)] marker:text-[var(--border)]">
+                  {role.bullets.map(bullet => (
+                    <li>{bullet}</li>
+                  ))}
+                </ul>
+              )}
+              {role.tags && (
+                <div class="mt-2 flex flex-wrap gap-1.5">
+                  {role.tags.map(tag => (
+                    <span class="chip">{tag}</span>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </article>
@@ -300,23 +414,40 @@ const weeks = Array.from(
 
 <section class="py-10 sm:py-14">
   <h2 class="section-label">Skills</h2>
-  <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
     {
-      skills.map(([category, values]) => (
-        <div class="space-y-2.5">
-          <div class="font-mono text-[12.5px] uppercase tracking-wider text-[var(--muted-foreground)]">
-            {category}
+      skillGroups.map(({ title, icon: Icon, skills }) => (
+        <div class="rounded-lg border border-[var(--border)] bg-[var(--card)] p-5">
+          <div class="flex items-center gap-2.5 text-[var(--muted-foreground)]">
+            <Icon className="h-4 w-4" strokeWidth={1.75} />
+            <h3 class="text-[14.5px] font-semibold text-[var(--foreground)]">
+              {title}
+            </h3>
           </div>
-          <div class="flex flex-wrap gap-1.5">
-            {values.map((skill) => <span class="chip text-[12px]">{skill}</span>)}
-          </div>
+          <ul class="mt-4 space-y-2.5">
+            {skills.map(({ name, level }) => (
+              <li class="flex items-baseline justify-between gap-x-4">
+                <span class="min-w-0 text-[13.5px] leading-snug text-[var(--foreground-90)]">
+                  {name}
+                </span>
+                <span
+                  class:list={[
+                    "skill-level",
+                    level === "Expert" ? "is-expert" : "is-advanced",
+                  ]}
+                >
+                  {level}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       ))
     }
   </div>
 </section>
 
-<section class="pt-12 pb-10 sm:pt-16 sm:pb-12">
+<section class="pb-10 pt-12 sm:pb-12 sm:pt-16">
   <div class="space-y-4">
     <h2 class="section-label">Get in touch</h2>
     <p class="max-w-md text-[16px] leading-[1.6] text-[var(--foreground-90)]">
@@ -341,6 +472,18 @@ const weeks = Array.from(
   .chip {
     @apply inline-flex items-center rounded-md border border-[var(--border)] bg-[var(--muted-40)] px-2 py-0.5 font-mono text-[11.5px] text-[var(--muted-foreground)] transition-colors hover:border-[var(--foreground-30)] hover:text-[var(--foreground)];
   }
+
+  .skill-level {
+    @apply shrink-0 font-mono text-[10.5px] uppercase tracking-[0.14em];
+  }
+
+  .skill-level.is-expert {
+    @apply font-medium text-[var(--foreground)];
+  }
+
+  .skill-level.is-advanced {
+    @apply text-[var(--muted-foreground)];
+  }
   .gh-grid {
     display: grid;
     grid-auto-flow: column;
@@ -353,7 +496,9 @@ const weeks = Array.from(
 
   .gh-cell {
     border-radius: 2px;
-    transition: transform 120ms ease, outline-color 120ms ease;
+    transition:
+      transform 120ms ease,
+      outline-color 120ms ease;
   }
 
   .gh-cell:hover {
@@ -367,20 +512,36 @@ const weeks = Array.from(
     background: var(--muted);
   }
 
-  .gh-level-1 { background: #c9c9c9; }
-  .gh-level-2 { background: #9a9a9a; }
-  .gh-level-3 { background: #5c5c5c; }
-  .gh-level-4 { background: #1f1f1f; }
+  .gh-level-1 {
+    background: #c9c9c9;
+  }
+  .gh-level-2 {
+    background: #9a9a9a;
+  }
+  .gh-level-3 {
+    background: #5c5c5c;
+  }
+  .gh-level-4 {
+    background: #1f1f1f;
+  }
 
   :global(.dark) .gh-empty,
   :global(.dark) .gh-level-0 {
     background: #1a1a1a;
   }
 
-  :global(.dark) .gh-level-1 { background: #3a3a3a; }
-  :global(.dark) .gh-level-2 { background: #6b6b6b; }
-  :global(.dark) .gh-level-3 { background: #a8a8a8; }
-  :global(.dark) .gh-level-4 { background: #e5e5e5; }
+  :global(.dark) .gh-level-1 {
+    background: #3a3a3a;
+  }
+  :global(.dark) .gh-level-2 {
+    background: #6b6b6b;
+  }
+  :global(.dark) .gh-level-3 {
+    background: #a8a8a8;
+  }
+  :global(.dark) .gh-level-4 {
+    background: #e5e5e5;
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .gh-cell {
