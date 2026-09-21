@@ -333,6 +333,26 @@ const weeks = Array.from(
   </div>
 </section>
 
+<section class="py-10 sm:py-14">
+  <h2 class="section-label">Location &amp; Availability</h2>
+  <div class="rounded-lg border border-[var(--border)] bg-[var(--card)] p-5">
+    <dl class="divide-y divide-[var(--border)]">
+      {
+        details.map(({ label, value }) => (
+          <div class="flex flex-col gap-1 py-3.5 first:pt-0 last:pb-0 sm:flex-row sm:items-baseline sm:gap-6">
+            <dt class="w-28 shrink-0 font-mono text-[12px] uppercase tracking-wider text-[var(--muted-foreground)]">
+              {label}
+            </dt>
+            <dd class="min-w-0 flex-1 text-[13.5px] leading-relaxed text-[var(--foreground-90)]">
+              {value}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
 <section class="py-6 sm:py-8">
   <div
     class="mb-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1"
@@ -464,26 +484,6 @@ const weeks = Array.from(
         </div>
       ))
     }
-  </div>
-</section>
-
-<section class="py-10 sm:py-14">
-  <h2 class="section-label">Location &amp; Availability</h2>
-  <div class="rounded-lg border border-[var(--border)] bg-[var(--card)] p-5">
-    <dl class="divide-y divide-[var(--border)]">
-      {
-        details.map(({ label, value }) => (
-          <div class="flex flex-col gap-1 py-3.5 first:pt-0 last:pb-0 sm:flex-row sm:items-baseline sm:gap-6">
-            <dt class="w-28 shrink-0 font-mono text-[12px] uppercase tracking-wider text-[var(--muted-foreground)]">
-              {label}
-            </dt>
-            <dd class="min-w-0 flex-1 text-[13.5px] leading-relaxed text-[var(--foreground-90)]">
-              {value}
-            </dd>
-          </div>
-        ))
-      }
-    </dl>
   </div>
 </section>
 
