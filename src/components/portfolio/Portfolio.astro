@@ -237,6 +237,24 @@ const skillGroups: SkillGroup[] = [
   },
 ];
 
+const details = [
+  { label: "Based in", value: "Kediri, Indonesia" },
+  {
+    label: "Time zone",
+    value:
+      "UTC+7 (WIB). Full overlap with Singapore, Malaysia, and the Philippines; around five hours with CET.",
+  },
+  {
+    label: "Availability",
+    value:
+      "Available for full-time remote roles, contract, and freelance work.",
+  },
+  {
+    label: "Languages",
+    value: "Indonesian (native) · English (professional working proficiency)",
+  },
+];
+
 let contributions: Contribution[] = [];
 try {
   const response = await fetch(
@@ -448,12 +466,33 @@ const weeks = Array.from(
   </div>
 </section>
 
+<section class="py-10 sm:py-14">
+  <h2 class="section-label">Location &amp; Availability</h2>
+  <div class="rounded-lg border border-[var(--border)] bg-[var(--card)] p-5">
+    <dl class="divide-y divide-[var(--border)]">
+      {
+        details.map(({ label, value }) => (
+          <div class="flex flex-col gap-1 py-3.5 first:pt-0 last:pb-0 sm:flex-row sm:items-baseline sm:gap-6">
+            <dt class="w-28 shrink-0 font-mono text-[12px] uppercase tracking-wider text-[var(--muted-foreground)]">
+              {label}
+            </dt>
+            <dd class="min-w-0 flex-1 text-[13.5px] leading-relaxed text-[var(--foreground-90)]">
+              {value}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
 <section class="pb-10 pt-12 sm:pb-12 sm:pt-16">
   <div class="space-y-4">
     <h2 class="section-label">Get in touch</h2>
     <p class="max-w-md text-[16px] leading-[1.6] text-[var(--foreground-90)]">
-      Open to senior and staff roles, backend-heavy or full-stack. Available for
-      selective contract work. Best reached by email.
+      I am currently open to senior and staff roles, backend-heavy or
+      full-stack. For hiring or project inquiries, email is the fastest way to
+      reach me.
     </p>
     <a
       href="mailto:bangadam.dev@gmail.com"
