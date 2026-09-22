@@ -4,6 +4,7 @@ import {
   Bot,
   Cloud,
   Database,
+  Download,
   Languages,
   Layers,
   Mail,
@@ -13,6 +14,22 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import Socials from "@components/Socials.astro";
+import { CV } from "@data/cv";
+
+const { profile, pdf, details, roles, skillGroups } = CV;
+
+// Skill group icons live here, not in cv.json: a Lucide component cannot be
+// serialised into data that the PDF builder also has to read.
+const skillIcons: Record<string, LucideIcon> = {
+  languages: Languages,
+  layers: Layers,
+  database: Database,
+  network: Network,
+  bot: Bot,
+  plug: Plug,
+  cloud: Cloud,
+  shieldcheck: ShieldCheck,
+};
 
 type Contribution = {
   date: string;
@@ -23,238 +40,6 @@ type Contribution = {
 type ContributionResponse = {
   contributions: Contribution[];
 };
-
-type Role = {
-  company: string;
-  role: string;
-  period: string;
-  location: string;
-  bullets?: string[];
-  tags?: string[];
-};
-
-const roles: Role[] = [
-  {
-    company: "Motocle, Inc.",
-    role: "Full-stack Developer (Freelance)",
-    period: "Apr 2025 - Present",
-    location: "Fukuoka, Japan (Remote)",
-    bullets: [
-      "Built new booking and customer-registration features for a veterinary-clinic system, streamlining appointment scheduling and client onboarding.",
-      "Integrated the Smaregi Point of Sale system to unify in-clinic transactions with the platform.",
-      "Implemented a Retrieval-Augmented Generation feature to surface relevant clinical information from clinic data.",
-      "Diagnosed and fixed bugs across the clinic system, improving stability and reliability.",
-    ],
-    tags: ["Smaregi POS", "RAG", "Booking"],
-  },
-  {
-    company: "PT Kreatif Transportasi Gemilang (Get And Ride)",
-    role: "Senior Software Engineer",
-    period: "Nov 2023 - Present",
-    location: "Jakarta, Indonesia",
-    bullets: [
-      "Developed a real-time chat API service for web and mobile applications using WebSocket and Redis, enhancing user engagement.",
-      "Implemented a secure payment feature using the Midtrans payment gateway, streamlining product transactions and driving revenue growth.",
-      "Developed a comprehensive voucher system that streamlined payments and significantly increased sales conversion rates.",
-      "Engineered a new driver platform for order task management, earnings tracking, and profile administration.",
-      "Designed and implemented a new airport shuttle service connecting airports to city destinations, expanding service offerings.",
-      "Resolved critical timezone synchronization issues so users receive accurate times based on their location.",
-    ],
-    tags: ["WebSocket", "Redis", "Midtrans"],
-  },
-  {
-    company: "ASABA INNOTECH",
-    role: "Senior Full Stack Engineer",
-    period: "Nov 2022 - Jul 2024",
-    location: "Jakarta, Indonesia",
-    bullets: [
-      "Developed and deployed an Omni Channel Order Management System (OMS) that streamlined order processing.",
-      "Engineered a robust Sales Force Automation platform (SFA) that enhanced field sales operations and team productivity.",
-      "Designed and implemented a centralized notification system for internal projects across multiple platforms.",
-      "Built a data integration service that synchronizes critical business data from SAP to internal applications.",
-    ],
-    tags: ["OMS", "SFA", "SAP"],
-  },
-  {
-    company: "KB Finansia Multi Finance",
-    role: "Backend Engineer",
-    period: "May 2022 - Nov 2022",
-    location: "Jakarta, Indonesia",
-    bullets: ['Developed the B2B API project "Join Finance".'],
-    tags: ["REST API", "B2B"],
-  },
-  {
-    company: "PT Alfath Technologi Kreatif",
-    role: "Full Stack Developer (Contract)",
-    period: "Feb 2022 - Apr 2022",
-    location: "Malang, Indonesia",
-    bullets: [
-      "Built a Point of Sale application for PT SMI GROUP using Laravel, optimising queries and database indexing for performance. Used by roughly 50 outlets across Indonesia.",
-    ],
-    tags: ["Laravel", "POS"],
-  },
-  {
-    company: "Esteh Creative",
-    role: "Full Stack Developer (Contract)",
-    period: "Dec 2021 - Apr 2022",
-    location: "Malang, Indonesia",
-    bullets: [
-      "Integrated the Finpay Emoney payment system into an e-commerce website for seamless, secure transactions.",
-      "Refactored legacy code and optimised data queries, making the application 30% faster and easier to maintain.",
-    ],
-    tags: ["Finpay", "E-commerce"],
-  },
-  {
-    company: "PT Datamax Teknologi Internasional",
-    role: "Back End Developer",
-    period: "Apr 2021 - Dec 2021",
-    location: "Malang, Indonesia",
-    bullets: [
-      "Migrated the backend from PHP to Golang, improving application performance by 50%.",
-      "Integrated delivery services using Gosend, JNT, and JNE, adding 500 new users.",
-    ],
-    tags: ["Go", "Delivery APIs"],
-  },
-  {
-    company: "Remote Worker Indonesia",
-    role: "Backend Developer (Contract)",
-    period: "Sep 2021 - Oct 2021",
-    location: "Yogyakarta, Indonesia",
-    bullets: [
-      "Built the REST API and admin dashboard for the mobile app of PUSAT PELATIHAN PERTANIAN BPPSDMP - KEMENTAN.",
-    ],
-    tags: ["REST API", "Dashboard"],
-  },
-  {
-    company: "PT. Ergossum Sukses Makmur",
-    role: "Full-stack Developer",
-    period: "Aug 2020 - Feb 2021",
-    location: "Malang, Indonesia",
-    bullets: [
-      "Doolen: API creation, frontend integration, and Xendit payment gateway integration for a cooking-ingredients e-commerce website.",
-      "Esusmart: API creation, frontend integration, and Xendit payment gateway integration for a cooking-ingredients e-commerce website.",
-      "Froya: API creation and frontend integration for a processed-chicken e-commerce website.",
-    ],
-    tags: ["Laravel", "Xendit", "E-commerce"],
-  },
-];
-
-type SkillLevel = "Expert" | "Advanced";
-
-type SkillGroup = {
-  title: string;
-  icon: LucideIcon;
-  skills: Array<{ name: string; level: SkillLevel }>;
-};
-
-const skillGroups: SkillGroup[] = [
-  {
-    title: "Languages",
-    icon: Languages,
-    skills: [
-      { name: "PHP", level: "Expert" },
-      { name: "JavaScript / TypeScript", level: "Expert" },
-      { name: "SQL", level: "Expert" },
-      { name: "Go", level: "Expert" },
-      { name: "Python", level: "Advanced" },
-    ],
-  },
-  {
-    title: "Frameworks",
-    icon: Layers,
-    skills: [
-      { name: "Laravel / Lumen", level: "Expert" },
-      { name: "NestJS", level: "Expert" },
-      { name: "ExpressJS / Fastify", level: "Expert" },
-      { name: "ElysiaJS", level: "Advanced" },
-      { name: "Vue.js", level: "Advanced" },
-    ],
-  },
-  {
-    title: "Databases & Caching",
-    icon: Database,
-    skills: [
-      { name: "PostgreSQL", level: "Expert" },
-      { name: "MySQL", level: "Expert" },
-      { name: "Redis", level: "Expert" },
-      { name: "MongoDB", level: "Advanced" },
-      { name: "Firebase Firestore", level: "Advanced" },
-    ],
-  },
-  {
-    title: "API & Architecture",
-    icon: Network,
-    skills: [
-      { name: "REST API design", level: "Expert" },
-      { name: "Swagger / OpenAPI", level: "Expert" },
-      { name: "GraphQL", level: "Advanced" },
-      { name: "gRPC", level: "Advanced" },
-      { name: "Semi-microservices, multi-tenant", level: "Advanced" },
-    ],
-  },
-  {
-    title: "AI & Agents",
-    icon: Bot,
-    skills: [
-      { name: "MCP (Model Context Protocol)", level: "Expert" },
-      { name: "AI agents & agentic workflows", level: "Expert" },
-      { name: "LLM integration (OpenAI, Anthropic)", level: "Advanced" },
-      { name: "RAG", level: "Advanced" },
-    ],
-  },
-  {
-    title: "Integrations",
-    icon: Plug,
-    skills: [
-      { name: "Payments: Xendit, Midtrans, Stripe, IPay88", level: "Expert" },
-      { name: "Messaging: Twilio, WhatsApp API", level: "Expert" },
-      { name: "Email: Brevo, MailGun", level: "Expert" },
-      { name: "Logistics: JNE, Google Maps API", level: "Advanced" },
-      { name: "Realtime: Socket.IO, Firebase FCM", level: "Advanced" },
-    ],
-  },
-  {
-    title: "Cloud & DevOps",
-    icon: Cloud,
-    skills: [
-      { name: "Docker", level: "Advanced" },
-      { name: "Git (GitHub, Bitbucket)", level: "Expert" },
-      { name: "GitHub Actions", level: "Advanced" },
-      { name: "AWS (S3, SQS)", level: "Advanced" },
-      { name: "NGINX", level: "Advanced" },
-      { name: "Laravel Vapor", level: "Advanced" },
-    ],
-  },
-  {
-    title: "Auth & Quality",
-    icon: ShieldCheck,
-    skills: [
-      { name: "OAuth2 / OIDC single sign-on", level: "Expert" },
-      { name: "MFA and OTP delivery", level: "Expert" },
-      { name: "RBAC", level: "Expert" },
-      { name: "Query profiling & optimisation", level: "Expert" },
-      { name: "PHPUnit, unit testing", level: "Advanced" },
-    ],
-  },
-];
-
-const details = [
-  { label: "Based in", value: "Kediri, Indonesia" },
-  {
-    label: "Time zone",
-    value:
-      "UTC+7 (WIB). Full overlap with Singapore and Japan; around five hours with CET.",
-  },
-  {
-    label: "Availability",
-    value:
-      "Available for full-time remote roles, contract, and freelance work.",
-  },
-  {
-    label: "Languages",
-    value: "Indonesian (native) · English (professional working proficiency)",
-  },
-];
 
 let contributions: Contribution[] = [];
 try {
@@ -316,7 +101,7 @@ const weeks = Array.from(
         Hi there! I'm Adam.
       </h1>
       <p class="mt-0.5 text-[13px] text-[var(--muted-foreground)]">
-        Software Engineer · Kediri, Indonesia
+        {profile.title} · {profile.location}
       </p>
     </div>
   </div>
@@ -324,12 +109,14 @@ const weeks = Array.from(
     <p
       class="max-w-xl text-[17px] leading-[1.6] text-[var(--hero-fg)] sm:text-[18px]"
     >
-      Fullstack engineer with 5+ years shipping payment systems, real-time
-      services, and multi-tenant platforms for companies in Indonesia and Japan.
-      My core stack is PHP, Go, and TypeScript, and lately I have been building
-      AI agents and RAG pipelines. I write about what I build.
+      {profile.summary}
     </p>
     <Socials />
+    <a href={pdf.href} download class="cv-download">
+      <Download className="h-4 w-4" strokeWidth={1.9} aria-hidden="true" />
+      {pdf.label}
+      <span class="cv-download-format">PDF</span>
+    </a>
   </div>
 </section>
 
@@ -456,33 +243,36 @@ const weeks = Array.from(
   <h2 class="section-label">Skills</h2>
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
     {
-      skillGroups.map(({ title, icon: Icon, skills }) => (
-        <div class="rounded-lg border border-[var(--border)] bg-[var(--card)] p-5">
-          <div class="flex items-center gap-2.5 text-[var(--muted-foreground)]">
-            <Icon className="h-4 w-4" strokeWidth={1.75} />
-            <h3 class="text-[14.5px] font-semibold text-[var(--foreground)]">
-              {title}
-            </h3>
+      skillGroups.map(({ title, icon, skills }) => {
+        const Icon = skillIcons[icon] ?? Layers;
+        return (
+          <div class="rounded-lg border border-[var(--border)] bg-[var(--card)] p-5">
+            <div class="flex items-center gap-2.5 text-[var(--muted-foreground)]">
+              <Icon className="h-4 w-4" strokeWidth={1.75} />
+              <h3 class="text-[14.5px] font-semibold text-[var(--foreground)]">
+                {title}
+              </h3>
+            </div>
+            <ul class="mt-4 space-y-2.5">
+              {skills.map(({ name, level }) => (
+                <li class="flex items-baseline justify-between gap-x-4">
+                  <span class="min-w-0 text-[13.5px] leading-snug text-[var(--foreground-90)]">
+                    {name}
+                  </span>
+                  <span
+                    class:list={[
+                      "skill-level",
+                      level === "Expert" ? "is-expert" : "is-advanced",
+                    ]}
+                  >
+                    {level}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul class="mt-4 space-y-2.5">
-            {skills.map(({ name, level }) => (
-              <li class="flex items-baseline justify-between gap-x-4">
-                <span class="min-w-0 text-[13.5px] leading-snug text-[var(--foreground-90)]">
-                  {name}
-                </span>
-                <span
-                  class:list={[
-                    "skill-level",
-                    level === "Expert" ? "is-expert" : "is-advanced",
-                  ]}
-                >
-                  {level}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))
+        );
+      })
     }
   </div>
 </section>
@@ -512,6 +302,14 @@ const weeks = Array.from(
         <MessageCircle className="h-4 w-4" strokeWidth={1.75} />
         <span class="link-underline">+62 857 3227 6465</span>
       </a>
+      <a
+        href={pdf.href}
+        download
+        class="group inline-flex items-center gap-1.5 text-[15px] font-medium text-[var(--foreground)]"
+      >
+        <Download className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+        <span class="link-underline">Download CV (PDF)</span>
+      </a>
     </div>
   </div>
 </section>
@@ -523,6 +321,19 @@ const weeks = Array.from(
 
   .chip {
     @apply inline-flex items-center rounded-md border border-[var(--border)] bg-[var(--muted-40)] px-2 py-0.5 font-mono text-[11.5px] text-[var(--muted-foreground)] transition-colors hover:border-[var(--foreground-30)] hover:text-[var(--foreground)];
+  }
+
+  /* The only filled control on the page: the CV is the action a recruiter came for. */
+  .cv-download {
+    @apply inline-flex min-h-[44px] items-center gap-2 rounded-md bg-[var(--foreground)] px-4 text-[13.5px] font-medium text-[var(--background)] transition-opacity;
+  }
+
+  .cv-download:hover {
+    @apply opacity-90;
+  }
+
+  .cv-download-format {
+    @apply font-mono text-[10.5px] uppercase tracking-[0.14em] opacity-60;
   }
 
   .skill-level {

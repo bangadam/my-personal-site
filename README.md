@@ -1,5 +1,13 @@
 # My personal site build with [Astro](https://astro.build/)
 
+## CV PDF
+
+The homepage links a PDF CV at `/cv/muhammad-meganata-adam-cv.pdf` (hero button and "Get in touch").
+
+- `src/data/cv.json` is the single source: profile, contacts, roles, skills, availability. The homepage (`src/components/portfolio/Portfolio.astro`) and the PDF both read it, so the two cannot drift.
+- `npm run cv:pdf` regenerates `public/cv/*.pdf` from that data (headless Chrome, print-to-pdf; set `CHROME_BIN` to override the browser path). The generated PDF is committed, so deploys and builds need no browser.
+- Update the content in `src/data/cv.json`, run `npm run cv:pdf`, and both the site and the PDF change together.
+
 ## Deploy to Cloudflare Pages
 
 This site is configured for native deployment to [Cloudflare Pages](https://pages.cloudflare.com/) via the official Astro Cloudflare adapter (`@astrojs/cloudflare`).
