@@ -21,7 +21,9 @@ This site is configured for native deployment to [Cloudflare Pages](https://page
 
 ### Automatic deploy (push to `main`)
 
-`.github/workflows/deploy-cloudflare.yml` builds and deploys on every push to `main`.
+`.github/workflows/deploy-cloudflare.yml` runs `npm ci`, `npm run build`, then `wrangler pages deploy ./dist` on every push to `main` (and on manual `workflow_dispatch`).
+
+The deploy step calls the `wrangler` version pinned in `package.json` through `npx`, so CI deploys with the same CLI a local `npm run cf:deploy` uses. It needs no third-party action, beyond `actions/checkout` and `actions/setup-node`.
 
 ### Manual deploy from your machine
 

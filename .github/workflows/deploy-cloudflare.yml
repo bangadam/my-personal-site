@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      deployments: write
     concurrency:
       group: cloudflare-pages
       cancel-in-progress: false
@@ -28,11 +27,11 @@ jobs:
       - name: Build
         run: npm run build
 
+      # Deploys with the wrangler version pinned in package.json, instead of a
+      # third-party action. cloudflare/pages-action no longer exists (404), which
+      # is why this workflow failed at "Prepare all required actions".
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: my-personal-site
-          directory: dist
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+        run: npx wrangler pages deploy ./dist --project-name=my-personal-site
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
