@@ -18,6 +18,13 @@ export type CvSkillGroup = {
 };
 
 export type CvDetail = { label: string; value: string };
+export type CvEducation = {
+  school: string;
+  degree: string;
+  location: string;
+  period: string;
+  details?: string[];
+};
 
 export type CvContact = { label: string; value: string; href: string };
 
@@ -33,6 +40,7 @@ export type CvDocument = {
   details: CvDetail[];
   roles: CvRole[];
   skillGroups: CvSkillGroup[];
+  education?: CvEducation[];
 };
 
 // Single source of truth for the site and the generated PDF (scripts/build-cv-pdf.mjs).

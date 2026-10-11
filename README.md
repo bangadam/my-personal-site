@@ -4,9 +4,9 @@
 
 The homepage links a PDF CV at `/cv/muhammad-meganata-adam-cv.pdf` (hero button and "Get in touch").
 
-- `src/data/cv.json` is the single source: profile, contacts, roles, skills, availability. The homepage (`src/components/portfolio/Portfolio.astro`) and the PDF both read it, so the two cannot drift.
-- `npm run cv:pdf` regenerates `public/cv/*.pdf` from that data (headless Chrome, print-to-pdf; set `CHROME_BIN` to override the browser path). The generated PDF is committed, so deploys and builds need no browser.
-- Update the content in `src/data/cv.json`, run `npm run cv:pdf`, and both the site and the PDF change together.
+- `src/data/cv.json` is the single source for the homepage (`src/components/portfolio/Portfolio.astro`) and PDF: profile, contacts, roles, skills, and availability.
+- `npm run cv:pdf` regenerates the committed `public/cv/*.pdf` with headless Chrome (set `CHROME_BIN` to override the browser path); deploys and builds need no browser.
+- The Harvard/ATS PDF uses a standard serif stack, single column, no embedded fonts, and skill names without proficiency levels. Add an optional `education` array to `src/data/cv.json` to render an EDUCATION section: each entry needs `school`, `degree`, `location`, and `period`, with optional `details` lines. Currently absent, so the PDF omits it. Update the data and run `npm run cv:pdf` to refresh the PDF alongside the site.
 
 ## Portfolio design and motion
 
