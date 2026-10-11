@@ -10,7 +10,7 @@ The homepage links a PDF CV at `/cv/muhammad-meganata-adam-cv.pdf` (hero button 
 
 ## Portfolio design and motion
 
-The Astro pages follow `my-personal-site.pen`: charcoal/Geist styling, responsive timelines, location details, and static Contact, 404, and search-empty mascots. Existing CV and article data remain authoritative.
+The Astro pages follow `my-personal-site.pen`: charcoal/Geist styling, responsive timelines, location details, and static Contact, 404, and search-empty mascots. The header icon and static mascots use transparent alpha backgrounds for both themes. Existing CV and article data remain authoritative.
 
 The Home sage light uses an 18-second CSS drift; icon feedback supports hover and keyboard focus. The GPT Image walking sprite uses the browser's Web Animations API and follows the mouse in desktop side gutters without covering the reading column. Pause/Resume is available; hidden tabs, mobile, and reduced-motion do not run the walking animation. Layered Lottie body-part reactions are not included.
 
