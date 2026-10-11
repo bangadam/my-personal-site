@@ -14,10 +14,10 @@ const { projects } = Astro.props;
 
 <Layout title={`Projects | ${SITE.title}`}>
   <Main pageTitle="Projects" pageDesc="A list of all my projects">
-    <div class="grid gap-3 sm:grid-cols-2">
+    <ul class="space-y-7">
       {projects.map(({ data }) => (
         <Project href={data.externalLink} frontmatter={data} />
       ))}
-    </div>
+    </ul>
   </Main>
 </Layout>

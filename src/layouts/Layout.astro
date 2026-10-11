@@ -4,8 +4,10 @@ import "@styles/base.css";
 import { ViewTransitions } from "astro:transitions";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
+import BackgroundMascot from "@components/BackgroundMascot.astro";
 
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
+const cfBeaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
 
 export interface Props {
   title?: string;
@@ -32,15 +34,17 @@ const socialImageURL = new URL(
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="canonical" href={canonicalURL} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#202020" />
 
     <title>{title}</title>
     <meta name="title" content={title} />
@@ -64,24 +68,33 @@ const socialImageURL = new URL(
         <meta name="google-site-verification" content={googleSiteVerification} />
       )
     }
+    {
+      cfBeaconToken && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={JSON.stringify({ token: cfBeaconToken, spa: true })}
+        />
+      )
+    }
 
     <ViewTransitions />
     <script is:inline>
       (() => {
         try {
           const stored = localStorage.getItem("theme");
-          const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-          if (stored === "dark" || (!stored && prefersDark)) {
-            document.documentElement.classList.add("dark");
-            document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#0a0a0a");
-          }
+          const dark = stored !== "light";
+          document.documentElement.classList.toggle("dark", dark);
+          document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#202020" : "#ffffff");
         } catch {
-          // localStorage or matchMedia may be unavailable (SSR / privacy mode)
+          // Keep the charcoal default when storage is unavailable.
         }
       })();
     </script>
   </head>
   <body class="min-h-dvh antialiased">
+    <BackgroundMascot />
     <a
       href="#main-content"
       class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-md focus:bg-[var(--primary)] focus:px-3 focus:py-2 focus:text-[var(--primary-foreground)]"
@@ -89,7 +102,7 @@ const socialImageURL = new URL(
       Skip to content
     </a>
     <Header />
-    <main id="main-content" class="mx-auto max-w-2xl px-5 sm:px-6">
+    <main id="main-content" class="relative z-10 mx-auto max-w-[672px] bg-[var(--background)] px-6">
       <slot />
     </main>
     {footer && <Footer />}

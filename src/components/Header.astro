@@ -14,20 +14,14 @@ const links = [
 ];
 ---
 
-<header
-  class="sticky top-0 z-50 w-full border-b border-[var(--border)] bg-[var(--background-70)] backdrop-blur-md"
->
-  <div class="mx-auto flex h-14 max-w-2xl items-center justify-between px-5 sm:px-6">
+<header class="relative z-50 w-full bg-[var(--background)] py-4 transition-colors duration-[240ms]">
+  <div class="mx-auto flex h-12 max-w-[672px] items-center justify-between px-6">
     <a
       href="/"
-      class="group flex shrink-0 items-center gap-2 text-sm font-medium tracking-tight"
+      class="brand-link flex shrink-0 items-center"
       aria-label="Home"
     >
-      <span
-        class="flex h-7 w-7 items-center justify-center rounded-full border border-[var(--border)] font-mono text-[11px] font-medium text-[var(--muted-foreground)] transition-colors group-hover:border-[var(--foreground)] group-hover:text-[var(--foreground)]"
-      >
-        a.
-      </span>
+      <img src="/site-icon.png" alt="" width="28" height="28" class="brand-icon h-7 w-7 rounded-md object-contain" />
     </a>
 
     <nav class="flex items-center gap-0.5" aria-label="Main">
@@ -37,10 +31,10 @@ const links = [
             href={link.href}
             aria-current={active === link.key ? "page" : undefined}
             class:list={[
-              "inline-flex h-9 items-center rounded-md px-2.5 text-[13px] transition-colors",
+              "nav-link inline-flex h-9 items-center rounded-md px-2.5 text-[13px]",
               active === link.key
                 ? "font-medium text-[var(--foreground)]"
-                : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]",
+                : "text-[var(--muted-foreground)]",
             ]}
           >
             {link.label}

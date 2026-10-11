@@ -3,10 +3,11 @@ import Layout from "@layouts/Layout.astro";
 ---
 
 <Layout title="404 - Adam" description="Page not found.">
-  <section class="flex min-h-[60vh] flex-col items-start justify-center gap-6 pt-12 pb-16">
+  <section class="flex min-h-[60vh] flex-col items-center justify-center gap-6 pb-16 pt-12 text-center">
     <div class="font-mono text-[12px] uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
       Error 404
     </div>
+    <img src="/assets/mascot/rsmQV.webp" alt="" aria-hidden="true" width="180" height="180" class="pointer-events-none h-[180px] w-[180px]" />
     <h1 class="text-[36px] font-semibold leading-[1.05] tracking-[-0.025em] text-[var(--foreground)] sm:text-[48px]">
       Lost in the stack trace.
     </h1>
@@ -15,7 +16,7 @@ import Layout from "@layouts/Layout.astro";
       typo. Either way, the back button is your friend.
     </p>
     <pre
-      class="overflow-x-auto rounded-md border border-[var(--border)] bg-[var(--card)] p-4 font-mono text-[12px] leading-[1.4] text-[var(--muted-foreground)]"
+      class="max-w-full overflow-x-auto rounded-md border border-[var(--border)] bg-[var(--card)] p-4 text-left font-mono text-[12px] leading-[1.4] text-[var(--muted-foreground)]"
     >{`> curl -I {url}
 HTTP/1.1 404 Not Found
 x-powered-by: Cloudflare
@@ -24,9 +25,9 @@ content-type: text/html; charset=utf-8
 `}</pre>
     <a
       href="/"
-      class="link-underline inline-flex items-center gap-1 text-[15px] font-medium text-[var(--foreground)]"
+      class="icon-link motion-next inline-flex items-center gap-1 text-[15px] font-medium text-[var(--foreground)]"
     >
-      Back to home <span aria-hidden="true">&rarr;</span>
+      Back to home <span class="interaction-icon" aria-hidden="true">&rarr;</span>
     </a>
   </section>
 </Layout>

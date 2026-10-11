@@ -18,14 +18,14 @@ const { props } = Astro;
 <div class="pt-10 sm:pt-14">
   {
     "titleTransition" in props ? (
-      <h1 class="text-[28px] font-semibold leading-tight tracking-[-0.02em] text-[var(--foreground)] sm:text-[34px]">
+      <h1 class="text-[24px] font-medium leading-tight tracking-[-0.02em] text-[var(--foreground)]">
         {props.pageTitle[0]}
         <span transition:name={props.titleTransition}>
           {props.pageTitle[1]}
         </span>
       </h1>
     ) : (
-      <h1 class="text-[28px] font-semibold leading-tight tracking-[-0.02em] text-[var(--foreground)] sm:text-[34px]">
+      <h1 class="text-[24px] font-medium leading-tight tracking-[-0.02em] text-[var(--foreground)]">
         {props.pageTitle}
       </h1>
     )

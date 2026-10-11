@@ -1,5 +1,5 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content";
+import { getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Main from "@layouts/Main.astro";
 import Card from "@components/Card";
@@ -10,14 +10,16 @@ import { SITE } from "@config";
 import getSortedPosts from "@utils/getSortedPosts";
 
 export interface Props {
-  post: CollectionEntry<"blog">;
   tag: string;
 }
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
+  const [posts, projects] = await Promise.all([
+    getCollection("blog"),
+    getCollection("project"),
+  ]);
 
-  const tags = getUniqueTags(posts);
+  const tags = getUniqueTags([...posts, ...projects]);
 
   return tags.map(tag => {
     return {
@@ -40,14 +42,19 @@ const sortTagsPost = getSortedPosts(tagPosts);
 
 <Layout title={`Tag:${tag} | ${SITE.title}`}>
   <Main
-    pageTitle={[`Tag:`, `${tag}`]}
+    pageTitle={["Tag: ", tag]}
     titleTransition={tag}
     pageDesc={`All the articles or projects with the tag "${tag}".`}
   >
-    <ul>
+    <ul class="space-y-7">
       {
-        sortTagsPost.map(({ data }) => (
-          <Card href={`/posts/${slugify(data)}`} frontmatter={data} />
+        sortTagsPost.map(({ collection, data }) => (
+          <Card
+            href={collection === "project" ? data.externalLink : `/posts/${slugify(data)}`}
+            frontmatter={data}
+            external={collection === "project" && Boolean(data.externalLink)}
+            accent
+          />
         ))
       }
     </ul>

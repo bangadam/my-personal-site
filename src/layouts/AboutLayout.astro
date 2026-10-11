@@ -1,6 +1,7 @@
 ---
 import { SITE } from "@config";
 import Layout from "./Layout.astro";
+import AboutPortfolio from "@components/portfolio/AboutPortfolio.astro";
 
 export interface Props {
   frontmatter: {
@@ -12,11 +13,6 @@ export interface Props {
 const { frontmatter } = Astro.props;
 ---
 
-<Layout title={`${frontmatter.title} | ${SITE.title}`}>
-  <div class="prose pt-10 sm:pt-14">
-    <h1 class="text-[28px] font-semibold leading-tight tracking-[-0.02em] text-[var(--foreground)] sm:text-[34px]">
-      {frontmatter.title}
-    </h1>
-    <slot />
-  </div>
+<Layout title={`${frontmatter.title} | ${SITE.title}`} description={frontmatter.description}>
+  <AboutPortfolio />
 </Layout>

@@ -14,13 +14,13 @@ export interface Props {
 
 const { pageNum, totalPages, posts } = Astro.props;
 
-const prev = pageNum > 1 ? "" : "disabled";
-const next = pageNum < totalPages ? "" : "disabled";
+const prevDisabled = pageNum <= 1;
+const nextDisabled = pageNum >= totalPages;
 ---
 
 <Layout title={`Posts | ${SITE.title}`}>
   <Main pageTitle="Posts" pageDesc="All the articles I've posted.">
-    <ul>
+    <ul class="space-y-7">
       {posts.map(({ data }) => (
         <Card href={`/posts/${slugify(data)}`} frontmatter={data} />
       ))}
@@ -31,19 +31,23 @@ const next = pageNum < totalPages ? "" : "disabled";
     totalPages > 1 && (
       <nav class="mt-8 flex items-center justify-between" aria-label="Pagination">
         <a
-          href={pageNum - 1 !== 1 ? `/posts/${pageNum - 1}` : "/posts"}
-          class={`link-underline font-mono text-[13px] text-[var(--muted-foreground)] hover:text-[var(--foreground)] ${prev}`}
+          href={prevDisabled ? undefined : pageNum - 1 !== 1 ? `/posts/${pageNum - 1}` : "/posts"}
+          aria-disabled={prevDisabled ? "true" : undefined}
+          tabindex={prevDisabled ? -1 : undefined}
+          class:list={["pagination-link motion-prev inline-flex items-center gap-1 font-mono text-[13px] text-[var(--muted-foreground)]", prevDisabled && "disabled"]}
         >
-          &larr; Prev
+          <span class="interaction-icon" aria-hidden="true">&larr;</span> Prev
         </a>
         <span class="font-mono text-[12.5px] text-[var(--muted-foreground)]">
           {pageNum} / {totalPages}
         </span>
         <a
-          href={`/posts/${pageNum + 1}`}
-          class={`link-underline font-mono text-[13px] text-[var(--muted-foreground)] hover:text-[var(--foreground)] ${next}`}
+          href={nextDisabled ? undefined : `/posts/${pageNum + 1}`}
+          aria-disabled={nextDisabled ? "true" : undefined}
+          tabindex={nextDisabled ? -1 : undefined}
+          class:list={["pagination-link motion-next inline-flex items-center gap-1 font-mono text-[13px] text-[var(--muted-foreground)]", nextDisabled && "disabled"]}
         >
-          Next &rarr;
+          Next <span class="interaction-icon" aria-hidden="true">&rarr;</span>
         </a>
       </nav>
     )

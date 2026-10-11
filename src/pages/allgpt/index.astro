@@ -12,12 +12,12 @@ const StringToArray = (str: string) => str.split(";").map(item => item.trim());
     <div class="grid gap-3 sm:grid-cols-2">
       {
         results.map(({ title, url, text, category }) => (
-          <div class="row-hover rounded-md border border-[var(--border)] bg-[var(--card)] p-5">
+          <div class="rounded-md border border-[var(--border)] bg-[var(--card)] p-5">
             <a
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              class="text-[15px] font-medium text-[var(--foreground)]"
+              class="icon-link text-[15px] font-medium text-[var(--foreground)]"
             >
               {title}
             </a>

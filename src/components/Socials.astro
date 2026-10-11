@@ -21,9 +21,9 @@ const socials = SOCIALS.filter(({ active }) => active);
         target="_blank"
         rel="noopener noreferrer"
         title={social.linkTitle}
-        class="social-link link-underline transition-colors hover:text-[var(--foreground)]"
+        class="social-link icon-link"
       >
-        <span class="social-icon">
+        <span class="social-icon" aria-hidden="true">
           {social.name === "Github" && (
             <Github className="h-3.5 w-3.5" strokeWidth={1.75} />
           )}
@@ -71,6 +71,6 @@ const socials = SOCIALS.filter(({ active }) => active);
   }
 
   .social-icon {
-    @apply inline-flex shrink-0 opacity-80;
+    @apply inline-flex shrink-0;
   }
 </style>

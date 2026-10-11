@@ -1,418 +1,114 @@
 ---
-import type { LucideIcon } from "lucide-react";
-import {
-  Bot,
-  Cloud,
-  Database,
-  Download,
-  Languages,
-  Layers,
-  Mail,
-  Network,
-  Plug,
-  MessageCircle,
-  ShieldCheck,
-} from "lucide-react";
+import type { CollectionEntry } from "astro:content";
 import Socials from "@components/Socials.astro";
 import { CV } from "@data/cv";
+import slugify from "@utils/slugify";
+import { ArrowUpRight, Download } from "lucide-react";
 
-const { profile, pdf, details, roles, skillGroups } = CV;
-
-// Skill group icons live here, not in cv.json: a Lucide component cannot be
-// serialised into data that the PDF builder also has to read.
-const skillIcons: Record<string, LucideIcon> = {
-  languages: Languages,
-  layers: Layers,
-  database: Database,
-  network: Network,
-  bot: Bot,
-  plug: Plug,
-  cloud: Cloud,
-  shieldcheck: ShieldCheck,
-};
-
-type Contribution = {
-  date: string;
-  count: number;
-  level: number;
-};
-
-type ContributionResponse = {
-  contributions: Contribution[];
-};
-
-let contributions: Contribution[] = [];
-try {
-  const response = await fetch(
-    "https://github-contributions-api.jogruber.de/v4/bangadam?y=last"
-  );
-  if (response.ok) {
-    const data = (await response.json()) as ContributionResponse;
-    contributions = data.contributions
-      .sort((a, b) => a.date.localeCompare(b.date))
-      .slice(-365);
-  }
-} catch {
-  contributions = [];
+export interface Props {
+  recent: CollectionEntry<"blog">[];
 }
 
-const latestContributionDate = contributions.at(-1)?.date ?? "";
-const latestMonth = latestContributionDate.slice(0, 7);
-const latestYear = latestContributionDate.slice(0, 4);
-const monthlyContributions = contributions
-  .filter(day => day.date.startsWith(latestMonth))
-  .reduce((total, day) => total + day.count, 0);
-const yearlyContributions = contributions
-  .filter(day => day.date.startsWith(latestYear))
-  .reduce((total, day) => total + day.count, 0);
-const latestMonthLabel = latestContributionDate
-  ? new Intl.DateTimeFormat("en", { month: "long" }).format(
-      new Date(`${latestContributionDate}T00:00:00Z`)
-    )
-  : "This month";
-
-const firstWeekday = contributions.length
-  ? new Date(`${contributions[0].date}T00:00:00Z`).getUTCDay()
-  : 0;
-const paddedDays: Array<Contribution | null> = [
-  ...Array.from({ length: firstWeekday }, () => null),
-  ...contributions,
-];
-const weeks = Array.from(
-  { length: Math.ceil(paddedDays.length / 7) },
-  (_, index) => paddedDays.slice(index * 7, index * 7 + 7)
-);
+const { recent } = Astro.props;
+const { profile, roles, contacts, details, pdf } = CV;
+const availability = details.find(detail => detail.label === "Availability")?.value;
+const email = contacts.find(contact => contact.label === "Email");
+const whatsapp = contacts.find(contact => contact.label === "WhatsApp");
 ---
 
-<section class="pb-10 pt-12 sm:pb-14 sm:pt-20">
-  <div class="flex items-center gap-4">
-    <img
-      src="/avatar.png"
-      alt="Muhammad Meganata Adam"
-      width="64"
-      height="64"
-      loading="eager"
-      class="h-16 w-16 rounded-full border border-[var(--border)] object-cover"
-    />
-    <div>
-      <h1
-        class="text-[28px] font-semibold leading-tight tracking-[-0.02em] text-[var(--foreground)] sm:text-[34px]"
-      >
-        Hi there! I'm Adam.
-      </h1>
-      <p class="mt-0.5 text-[13px] text-[var(--muted-foreground)]">
-        {profile.title} · {profile.location}
-      </p>
+<div class="home-profile relative isolate space-y-9 pb-12 pt-8 sm:space-y-11 sm:pb-16 sm:pt-12">
+  <div class="home-ambient" aria-hidden="true"></div>
+  <header class="!mt-0 flex items-center gap-[18px]">
+    <img src="/avatar.png" alt="" width="56" height="56" loading="eager" class="h-14 w-14 shrink-0 rounded-full object-cover" />
+    <div class="min-w-0 space-y-[3px]">
+      <h1 class="text-[19px] font-normal leading-[1.35]">{profile.name}</h1>
+      <p class="text-[13px] leading-[1.65] text-[var(--muted-foreground)]">{profile.title} · {profile.location}</p>
+      <Socials compact />
     </div>
-  </div>
-  <div class="mt-7 space-y-5">
-    <p
-      class="max-w-xl text-[17px] leading-[1.6] text-[var(--hero-fg)] sm:text-[18px]"
-    >
-      {profile.summary}
-    </p>
-    <Socials />
-    <a href={pdf.href} download class="cv-download">
-      <Download className="h-4 w-4" strokeWidth={1.9} aria-hidden="true" />
-      {pdf.label}
-      <span class="cv-download-format">PDF</span>
-    </a>
-  </div>
-</section>
+  </header>
 
-<section class="py-10 sm:py-14">
-  <h2 class="section-label">Location &amp; Availability</h2>
-  <div class="rounded-lg border border-[var(--border)] bg-[var(--card)] p-5">
-    <dl class="divide-y divide-[var(--border)]">
-      {
-        details.map(({ label, value }) => (
-          <div class="flex flex-col gap-1 py-3.5 first:pt-0 last:pb-0 sm:flex-row sm:items-baseline sm:gap-6">
-            <dt class="w-28 shrink-0 font-mono text-[12px] uppercase tracking-wider text-[var(--muted-foreground)]">
-              {label}
-            </dt>
-            <dd class="min-w-0 flex-1 text-[13.5px] leading-relaxed text-[var(--foreground-90)]">
-              {value}
-            </dd>
-          </div>
-        ))
-      }
-    </dl>
-  </div>
-</section>
+  <section aria-labelledby="home-about">
+    <h2 id="home-about" class="section-label">About</h2>
+    <p class="text-[15px] leading-[1.7] text-[var(--foreground-90)]">{profile.summary}</p>
+    <a href="/about" class="more-link icon-link motion-external">More about me <ArrowUpRight className="interaction-icon h-3.5 w-3.5" aria-hidden="true" /></a>
+  </section>
 
-<section class="py-6 sm:py-8">
-  <div
-    class="mb-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1"
-  >
-    <h2 class="section-label mb-0">GitHub Contributions</h2>
-    {
-      contributions.length > 0 && (
-        <p class="font-mono text-[11.5px] text-[var(--muted-foreground)]">
-          {latestMonthLabel}: {monthlyContributions.toLocaleString()} ·{" "}
-          {latestYear}: {yearlyContributions.toLocaleString()}
-        </p>
-      )
-    }
-  </div>
-  {
-    contributions.length > 0 ? (
-      <a
-        href="https://github.com/bangadam"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="github-chart block rounded-md border border-[var(--border)] bg-[var(--card)] p-3"
-        title="Open bangadam's GitHub profile"
-      >
-        <div class="gh-grid" aria-label="GitHub contribution chart">
-          {weeks.map(week =>
-            week.map(day =>
-              day ? (
-                <span
-                  class={`gh-cell gh-level-${day.level}`}
-                  title={`${day.date}: ${day.count} contribution${
-                    day.count === 1 ? "" : "s"
-                  }`}
-                  aria-label={`${day.date}: ${day.count} contribution${
-                    day.count === 1 ? "" : "s"
-                  }`}
-                />
-              ) : (
-                <span class="gh-cell gh-empty" aria-hidden="true" />
-              )
-            )
-          )}
+  <section aria-labelledby="home-location">
+    <h2 id="home-location" class="section-label">Location &amp; availability</h2>
+    <dl class="space-y-[22px]">
+      {details.map(({ label, value }) => (
+        <div class="grid grid-cols-1 gap-1 sm:grid-cols-[108px_minmax(0,1fr)] sm:gap-6">
+          <dt class="text-[13px] leading-[1.65] text-[var(--muted-foreground)] sm:text-[12px]">{label}</dt>
+          <dd class="min-w-0 text-[14px] leading-[1.65] text-[var(--foreground-90)] sm:text-[13px]">{value}</dd>
         </div>
-      </a>
+      ))}
+    </dl>
+  </section>
+
+  <section aria-labelledby="home-work">
+    <h2 id="home-work" class="section-label">Work experience</h2>
+    <ol class="space-y-[22px]">
+      {roles.slice(0, 3).map(role => (
+        <li class="flex flex-col gap-1 sm:flex-row sm:gap-6">
+          <span class="shrink-0 text-[12px] leading-[1.65] text-[var(--muted-foreground)] sm:w-[108px]">{role.period.replace(" - ", " — ")}</span>
+          <div class="min-w-0">
+            <h3 class="text-[14px] font-normal leading-[1.65]">{role.role} · {role.company}</h3>
+            <p class="mt-1 text-[12px] leading-[1.65] text-[var(--muted-foreground)]">{role.location}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+    <a href="/about#experience" class="more-link icon-link motion-external">Full experience &amp; skills <ArrowUpRight className="interaction-icon h-3.5 w-3.5" aria-hidden="true" /></a>
+  </section>
+
+  <section aria-labelledby="home-writing">
+    <h2 id="home-writing" class="section-label">Writing</h2>
+    {recent.length > 0 ? (
+      <ol class="space-y-[22px]">
+        {recent.map(({ data }) => (
+          <li class="flex flex-col gap-1 sm:flex-row sm:gap-6">
+            <time class="shrink-0 text-[12px] leading-[1.65] text-[var(--muted-foreground)] sm:w-[108px]" datetime={data.pubDatetime.toISOString()}>
+              {data.pubDatetime.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" })}
+            </time>
+            <a href={`/posts/${slugify(data)}`} class="icon-link motion-external w-fit text-[15px] leading-[1.65]">{data.title} <ArrowUpRight className="interaction-icon inline h-3.5 w-3.5" aria-hidden="true" /></a>
+          </li>
+        ))}
+      </ol>
     ) : (
-      <a
-        href="https://github.com/bangadam"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="link-underline text-[13px] text-[var(--muted-foreground)]"
-      >
-        View GitHub activity
-      </a>
-    )
-  }
-</section>
+      <p class="text-[14px] text-[var(--muted-foreground)]">Writing coming soon.</p>
+    )}
+    <a href="/posts" class="more-link icon-link motion-external">All writing <ArrowUpRight className="interaction-icon h-3.5 w-3.5" aria-hidden="true" /></a>
+  </section>
 
-<section class="py-10 sm:py-14">
-  <h2 class="section-label">Experience</h2>
-  <div class="-mx-3">
-    {
-      roles.map(role => (
-        <article class="row-hover border-b border-[var(--border)] px-3 py-4 last:border-b-0">
-          <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
-            <span class="w-28 shrink-0 font-mono text-[12px] text-[var(--muted-foreground)]">
-              {role.period}
-            </span>
-            <div class="min-w-0 flex-1">
-              <h3 class="text-[15px] font-medium text-[var(--foreground)]">
-                {role.role}
-                <span class="font-normal text-[var(--muted-foreground)]">
-                  {" "}
-                  · {role.company}
-                </span>
-              </h3>
-              <p class="mt-0.5 font-mono text-[12px] text-[var(--muted-foreground)]">
-                {role.location}
-              </p>
-              {role.bullets && (
-                <ul class="mt-2 list-disc space-y-1 pl-4 text-[14px] leading-[1.6] text-[var(--muted-foreground)] marker:text-[var(--border)]">
-                  {role.bullets.map(bullet => (
-                    <li>{bullet}</li>
-                  ))}
-                </ul>
-              )}
-              {role.tags && (
-                <div class="mt-2 flex flex-wrap gap-1.5">
-                  {role.tags.map(tag => (
-                    <span class="chip">{tag}</span>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </article>
-      ))
-    }
-  </div>
-</section>
-
-<section class="py-10 sm:py-14">
-  <h2 class="section-label">Skills</h2>
-  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-    {
-      skillGroups.map(({ title, icon, skills }) => {
-        const Icon = skillIcons[icon] ?? Layers;
-        return (
-          <div class="rounded-lg border border-[var(--border)] bg-[var(--card)] p-5">
-            <div class="flex items-center gap-2.5 text-[var(--muted-foreground)]">
-              <Icon className="h-4 w-4" strokeWidth={1.75} />
-              <h3 class="text-[14.5px] font-semibold text-[var(--foreground)]">
-                {title}
-              </h3>
-            </div>
-            <ul class="mt-4 space-y-2.5">
-              {skills.map(({ name, level }) => (
-                <li class="flex items-baseline justify-between gap-x-4">
-                  <span class="min-w-0 text-[13.5px] leading-snug text-[var(--foreground-90)]">
-                    {name}
-                  </span>
-                  <span
-                    class:list={[
-                      "skill-level",
-                      level === "Expert" ? "is-expert" : "is-advanced",
-                    ]}
-                  >
-                    {level}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        );
-      })
-    }
-  </div>
-</section>
-
-<section class="pb-10 pt-12 sm:pb-12 sm:pt-16">
-  <div class="space-y-4">
-    <h2 class="section-label">Get in touch</h2>
-    <p class="max-w-md text-[16px] leading-[1.6] text-[var(--foreground-90)]">
-      I am currently open to senior and staff roles, backend-heavy or
-      full-stack. For hiring or project inquiries, reach me by email or
-      WhatsApp.
-    </p>
-    <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
-      <a
-        href="mailto:bangadam.dev@gmail.com"
-        class="group inline-flex items-center gap-1.5 text-[15px] font-medium text-[var(--foreground)]"
-      >
-        <Mail className="h-4 w-4" strokeWidth={1.75} />
-        <span class="link-underline">bangadam.dev@gmail.com</span>
-      </a>
-      <a
-        href="https://wa.me/6285732276465"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="group inline-flex items-center gap-1.5 text-[15px] font-medium text-[var(--foreground)]"
-      >
-        <MessageCircle className="h-4 w-4" strokeWidth={1.75} />
-        <span class="link-underline">+62 857 3227 6465</span>
-      </a>
-      <a
-        href={pdf.href}
-        download
-        class="group inline-flex items-center gap-1.5 text-[15px] font-medium text-[var(--foreground)]"
-      >
-        <Download className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
-        <span class="link-underline">Download CV (PDF)</span>
-      </a>
+  <section aria-labelledby="home-contact">
+    <h2 id="home-contact" class="section-label">Contact</h2>
+    <!-- ponytail: static mascot until layered head, eye, hand, and body Lottie assets are supplied. -->
+    <img src="/assets/mascot/rsmQV.webp" alt="" aria-hidden="true" width="88" height="88" loading="lazy" class="pointer-events-none mb-[22px] h-[88px] w-[88px]" />
+    {availability && <p class="text-[14px] leading-[1.65] text-[var(--foreground-90)]">{availability} For hiring or project inquiries, reach me by email or WhatsApp.</p>}
+    <div class="mt-[22px] flex flex-col items-start gap-1 text-[13px] leading-[1.65]">
+      {email && <a href={email.href} class="icon-link motion-external">{email.value} <ArrowUpRight className="interaction-icon inline h-3.5 w-3.5" aria-hidden="true" /></a>}
+      {whatsapp && <a href={whatsapp.href} target="_blank" rel="noopener noreferrer" class="icon-link motion-external">{whatsapp.value} <ArrowUpRight className="interaction-icon inline h-3.5 w-3.5" aria-hidden="true" /></a>}
+      <a href={pdf.href} download class="icon-link motion-download inline-flex items-center gap-1">Download CV (PDF) <Download className="interaction-icon h-3.5 w-3.5" aria-hidden="true" /></a>
     </div>
-  </div>
-</section>
+  </section>
+</div>
 
 <style>
   .section-label {
-    @apply text-[12px] font-medium uppercase tracking-[0.12em] text-[var(--muted-foreground)];
+    @apply mb-[22px] text-[13px] font-medium leading-[1.65] text-[var(--foreground)];
   }
-
-  .chip {
-    @apply inline-flex items-center rounded-md border border-[var(--border)] bg-[var(--muted-40)] px-2 py-0.5 font-mono text-[11.5px] text-[var(--muted-foreground)] transition-colors hover:border-[var(--foreground-30)] hover:text-[var(--foreground)];
-  }
-
-  /* The only filled control on the page: the CV is the action a recruiter came for. */
-  .cv-download {
-    @apply inline-flex min-h-[44px] items-center gap-2 rounded-md bg-[var(--foreground)] px-4 text-[13.5px] font-medium text-[var(--background)] transition-opacity;
-  }
-
-  .cv-download:hover {
-    @apply opacity-90;
-  }
-
-  .cv-download-format {
-    @apply font-mono text-[10.5px] uppercase tracking-[0.14em] opacity-60;
-  }
-
-  .skill-level {
-    @apply shrink-0 font-mono text-[10.5px] uppercase tracking-[0.14em];
-  }
-
-  .skill-level.is-expert {
-    @apply font-medium text-[var(--foreground)];
-  }
-
-  .skill-level.is-advanced {
-    @apply text-[var(--muted-foreground)];
-  }
-  .gh-grid {
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-rows: repeat(7, 1fr);
-    grid-auto-columns: 1fr;
-    gap: 2px;
-    width: 100%;
-    aspect-ratio: 53 / 7;
-  }
-
-  .gh-cell {
-    border-radius: 2px;
-    transition:
-      transform 120ms ease,
-      outline-color 120ms ease;
-  }
-
-  .gh-cell:hover {
-    outline: 1px solid var(--foreground);
-    outline-offset: 1px;
-    transform: scale(1.25);
-  }
-
-  .gh-empty,
-  .gh-level-0 {
-    background: var(--muted);
-  }
-
-  .gh-level-1 {
-    background: #c9c9c9;
-  }
-  .gh-level-2 {
-    background: #9a9a9a;
-  }
-  .gh-level-3 {
-    background: #5c5c5c;
-  }
-  .gh-level-4 {
-    background: #1f1f1f;
-  }
-
-  :global(.dark) .gh-empty,
-  :global(.dark) .gh-level-0 {
-    background: #1a1a1a;
-  }
-
-  :global(.dark) .gh-level-1 {
-    background: #3a3a3a;
-  }
-  :global(.dark) .gh-level-2 {
-    background: #6b6b6b;
-  }
-  :global(.dark) .gh-level-3 {
-    background: #a8a8a8;
-  }
-  :global(.dark) .gh-level-4 {
-    background: #e5e5e5;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .gh-cell {
-      transition: none;
-    }
-
-    .gh-cell:hover {
-      transform: none;
-    }
+  .more-link {
+    @apply mt-[22px] inline-flex w-fit items-center gap-1 text-[13px] leading-[1.65];
   }
 </style>
+
+<script>
+  import { observeAmbient } from "@utils/observeAmbient";
+
+  document.addEventListener("astro:page-load", () => {
+    const ambient = document.querySelector<HTMLElement>(".home-ambient");
+    if (!ambient) return;
+    const cleanup = observeAmbient(ambient);
+    document.addEventListener("astro:before-swap", cleanup, { once: true });
+  });
+</script>

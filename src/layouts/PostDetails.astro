@@ -33,12 +33,12 @@ const ogUrl = new URL(
   <article class="pt-10 sm:pt-14">
     <a
       href="/posts"
-      class="link-underline font-mono text-[12.5px] text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)]"
+      class="icon-link motion-prev inline-flex items-center gap-1 font-mono text-[12.5px] text-[var(--muted-foreground)]"
     >
-      &larr; All posts
+      <span class="interaction-icon" aria-hidden="true">&larr;</span> All posts
     </a>
 
-    <h1 transition:name={slugifyStr(title)} class="mt-4 text-[30px] font-semibold leading-[1.15] tracking-[-0.02em] text-[var(--foreground)] sm:text-[38px]">
+    <h1 class="mt-4 text-[30px] font-semibold leading-[1.15] tracking-[-0.02em] text-[var(--foreground)] sm:text-[38px]">
       {title}
     </h1>
     <div class="mt-3">

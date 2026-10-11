@@ -15,20 +15,20 @@ interface Props {
   searchList: SearchItem[];
 }
 
-interface SearchResult {
-  item: SearchItem;
-  refIndex: number;
-}
-
 export default function SearchBar({ searchList }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputVal, setInputVal] = useState("");
-  const [searchResults, setSearchResults] = useState<SearchResult[] | null>(
-    null
-  );
-
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
-    setInputVal(e.currentTarget.value);
+    const value = e.currentTarget.value;
+    setInputVal(value);
+    const url = new URL(window.location.href);
+    if (value) url.searchParams.set("q", value);
+    else url.searchParams.delete("q");
+    history.replaceState(
+      history.state,
+      "",
+      url.pathname + url.search + url.hash
+    );
   };
 
   const fuse = useMemo(
@@ -42,46 +42,30 @@ export default function SearchBar({ searchList }: Props) {
     [searchList]
   );
 
-  useEffect(() => {
-    // if URL has search query,
-    // insert that search query in input field
-    const searchUrl = new URLSearchParams(window.location.search);
-    const searchStr = searchUrl.get("q");
-    if (searchStr) setInputVal(searchStr);
+  const query = inputVal.trim();
+  const searchResults = useMemo(
+    () => (query.length > 1 ? fuse.search(query) : []),
+    [fuse, query]
+  );
 
-    // put focus cursor at the end of the string
-    setTimeout(function () {
-      inputRef.current!.selectionStart = inputRef.current!.selectionEnd =
-        searchStr?.length || 0;
-    }, 50);
+  useEffect(() => {
+    const value = new URLSearchParams(window.location.search).get("q") ?? "";
+    setInputVal(value);
+    inputRef.current?.setSelectionRange(value.length, value.length);
   }, []);
-
-  useEffect(() => {
-    // Add search result only if
-    // input value is more than one character
-    let inputResult = inputVal.length > 1 ? fuse.search(inputVal) : [];
-    setSearchResults(inputResult);
-
-    // Update search string in URL
-    if (inputVal.length > 0) {
-      const searchParams = new URLSearchParams(window.location.search);
-      searchParams.set("q", inputVal);
-      const newRelativePathQuery =
-        window.location.pathname + "?" + searchParams.toString();
-      history.replaceState(history.state, "", newRelativePathQuery);
-    } else {
-      history.replaceState(history.state, "", window.location.pathname);
-    }
-  }, [inputVal]);
 
   return (
     <>
-      <label className="relative block">
-        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-[var(--muted-foreground)]">
+      <label className="search-field relative block">
+        <span className="sr-only">Search posts</span>
+        <span
+          className="search-icon pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-[var(--muted-foreground)]"
+          aria-hidden="true"
+        >
           <Search className="h-4 w-4" strokeWidth={1.75} />
         </span>
         <input
-          className="block w-full rounded-md border border-[var(--input)] bg-[var(--card)] py-2.5 pl-10 pr-3 font-sans text-[14px] text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:border-[var(--ring)] focus:outline-none"
+          className="block w-full rounded-md border border-[var(--input)] bg-[var(--card)] py-2.5 pl-10 pr-3 font-sans text-[14px] text-[var(--foreground)] placeholder:text-[var(--muted-foreground)]"
           placeholder="Search posts..."
           type="text"
           name="search"
@@ -93,25 +77,47 @@ export default function SearchBar({ searchList }: Props) {
         />
       </label>
 
-      {inputVal.length > 1 && (
-        <div className="mt-6 font-mono text-[12.5px] text-[var(--muted-foreground)]">
-          Found {searchResults?.length}
-          {searchResults?.length && searchResults?.length === 1
-            ? " result"
-            : " results"}{" "}
-          for '{inputVal}'
-        </div>
-      )}
-
-      <ul className="mt-2">
-        {searchResults &&
-          searchResults.map(({ item, refIndex }) => (
-            <Card
-              href={`/posts/${slugify(item.data)}`}
-              frontmatter={item.data}
-              key={`${refIndex}-${slugify(item.data)}`}
+      <div role="status" aria-live="polite">
+        {query.length > 1 && searchResults.length === 0 ? (
+          <div className="flex flex-col items-center gap-4 py-10 text-center">
+            <img
+              src="/assets/mascot/rsmQV.webp"
+              alt=""
+              aria-hidden="true"
+              width="120"
+              height="120"
+              className="pointer-events-none h-[120px] w-[120px]"
             />
-          ))}
+            <h2 className="text-[18px]">No articles found</h2>
+            <p className="text-[14px] text-[var(--muted-foreground)]">
+              Try a different keyword or browse all writing.
+            </p>
+            <a
+              href="/posts"
+              className="icon-link motion-next inline-flex items-center gap-1 text-[13px]"
+            >
+              All writing{" "}
+              <span className="interaction-icon" aria-hidden="true">
+                →
+              </span>
+            </a>
+          </div>
+        ) : query.length > 1 ? (
+          <p className="mt-6 font-mono text-[12.5px] text-[var(--muted-foreground)]">
+            Found {searchResults.length}{" "}
+            {searchResults.length === 1 ? "result" : "results"} for '{inputVal}'
+          </p>
+        ) : null}
+      </div>
+
+      <ul className="mt-6 space-y-7">
+        {searchResults.map(({ item, refIndex }) => (
+          <Card
+            href={`/posts/${slugify(item.data)}`}
+            frontmatter={item.data}
+            key={`${refIndex}-${slugify(item.data)}`}
+          />
+        ))}
       </ul>
     </>
   );

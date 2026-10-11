@@ -2,49 +2,12 @@
 import { getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Portfolio from "@components/portfolio/Portfolio.astro";
-import slugify from "@utils/slugify";
 import getSortedPosts from "@utils/getSortedPosts";
 
 const posts = await getCollection("blog", ({ data }) => !data.draft);
-const recent = getSortedPosts(posts).slice(0, 5);
+const recent = getSortedPosts(posts).slice(0, 3);
 ---
 
 <Layout footer={false}>
-  <Portfolio />
-  <section class="py-10 sm:py-14">
-    <h2 class="section-label">Recent Posts</h2>
-    <div class="-mx-3">
-      {
-        recent.map(({ data }) => (
-          <a
-            href={`/posts/${slugify(data)}`}
-            class="row-hover group flex flex-col gap-1 border-b border-[var(--border)] px-3 py-4 last:border-b-0 sm:flex-row sm:items-baseline sm:gap-4"
-          >
-            <span class="w-28 shrink-0 font-mono text-[12px] text-[var(--muted-foreground)]">
-              {data.pubDatetime.toLocaleDateString("en-EN", {
-                year: "numeric",
-                month: "short",
-                day: "2-digit",
-              })}
-            </span>
-            <span class="text-[15px] font-medium text-[var(--foreground)] transition-colors">
-              {data.title}
-            </span>
-          </a>
-        ))
-      }
-    </div>
-    <a
-      href="/posts"
-      class="link-underline mt-5 inline-flex items-center gap-1 text-[14px] font-medium text-[var(--foreground)]"
-    >
-      All posts <span aria-hidden="true">&rarr;</span>
-    </a>
-  </section>
+  <Portfolio recent={recent} />
 </Layout>
-
-<style>
-  .section-label {
-    @apply mb-5 text-[12px] font-medium uppercase tracking-[0.12em] text-[var(--muted-foreground)];
-  }
-</style>

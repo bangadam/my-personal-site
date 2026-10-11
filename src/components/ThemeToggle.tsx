@@ -14,6 +14,9 @@ export default function ThemeToggle() {
     const next = !dark;
     setDark(next);
     document.documentElement.classList.toggle("dark", next);
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", next ? "#202020" : "#ffffff");
     try {
       localStorage.setItem("theme", next ? "dark" : "light");
     } catch (_) {}
@@ -24,10 +27,14 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-md text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]"
+      className="theme-toggle inline-flex h-9 w-9 items-center justify-center rounded-md text-[var(--foreground)]"
     >
       {mounted &&
-        (dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />)}
+        (dark ? (
+          <Sun className="interaction-icon h-4 w-4" aria-hidden="true" />
+        ) : (
+          <Moon className="interaction-icon h-4 w-4" aria-hidden="true" />
+        ))}
     </button>
   );
 }
