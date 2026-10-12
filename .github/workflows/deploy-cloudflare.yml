@@ -26,6 +26,8 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          PUBLIC_CF_BEACON_TOKEN: ${{ secrets.CF_BEACON_TOKEN }}
 
       # Deploys with the wrangler version pinned in package.json, instead of a
       # third-party action. cloudflare/pages-action no longer exists (404), which
