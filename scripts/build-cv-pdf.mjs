@@ -52,7 +52,6 @@ const experience = cv.roles
   .map(role => `<article class="entry">
     <div class="row"><span class="org">${escapeHtml(role.company)}</span><span class="meta">${dash(role.period)}</span></div>
     <div class="row"><span class="role">${escapeHtml(role.role)}</span><span class="meta">${escapeHtml(role.location)}</span></div>
-    ${role.tags?.length ? `<p class="tech">${role.tags.map(escapeHtml).join(", ")}</p>` : ""}
     ${role.bullets?.length ? `<ul>${role.bullets.map(bullet => `<li>${escapeHtml(bullet)}</li>`).join("")}</ul>` : ""}
   </article>`)
   .join("");
@@ -64,11 +63,6 @@ const education = cv.education?.length
     ${(entry.details ?? []).map(detail => `<p>${escapeHtml(detail)}</p>`).join("")}
   </article>`).join("")}</section>`
   : "";
-
-const additional = cv.details
-  .filter(detail => detail.label !== "Based in")
-  .map(detail => `<p><strong>${escapeHtml(detail.label)}:</strong> ${escapeHtml(detail.value).replace(/\s*·\s*/g, ", ")}</p>`)
-  .join("");
 
 const html = `<!doctype html>
 <html lang="en">
@@ -107,7 +101,6 @@ section { margin-top: 8pt; }
 .org { font-weight: bold; }
 .role { font-style: italic; }
 .meta { text-align: right; white-space: nowrap; }
-.tech { font-size: 9.5pt; font-style: italic; color: #333; margin-top: 0.5pt; }
 ul { margin-top: 2pt; }
 li { list-style: none; padding-left: 10pt; text-indent: -10pt; }
 li::before { content: "•"; display: inline-block; width: 10pt; }
@@ -133,10 +126,6 @@ li::before { content: "•"; display: inline-block; width: 10pt; }
     ${experience}
   </section>
   ${education}
-  <section>
-    <h2>ADDITIONAL</h2>
-    ${additional}
-  </section>
 </body>
 </html>
 `;
