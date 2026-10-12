@@ -14,6 +14,45 @@ const { profile, roles, contacts, details, pdf } = CV;
 const availability = details.find(detail => detail.label === "Availability")?.value;
 const email = contacts.find(contact => contact.label === "Email");
 const whatsapp = contacts.find(contact => contact.label === "WhatsApp");
+// ponytail: public-site highlights only; add implementation details when project roles are confirmed.
+const featuredProjects = [
+  {
+    name: "Get & Ride",
+    href: "https://getandride.com/",
+    image: "get-and-ride",
+    alt: "Get & Ride homepage with car rental search and vehicle options",
+    description: "A car rental platform for exploring Bali, bringing vehicle discovery and trip planning into one place.",
+    highlights: [
+      "Search rentals by location, dates, and pickup and return times.",
+      "Compare vehicle options, daily rates, and self-drive or chauffeur services.",
+      "Explore airport transfers alongside account registration and sign-in.",
+    ],
+  },
+  {
+    name: "Nagara Express",
+    href: "https://nagaraexpress.site/",
+    image: "nagara-express",
+    alt: "Nagara Express homepage introducing delivery and import services",
+    description: "An import and logistics website connecting businesses in Indonesia with sourcing and shipping services from China and Singapore.",
+    highlights: [
+      "Door-to-door delivery with sea and air cargo service information.",
+      "Purchasing assistance for Alibaba, 1688, and Taobao, with a step-by-step import guide.",
+      "Warehouse locations, shipping FAQs, and direct WhatsApp consultation.",
+    ],
+  },
+  {
+    name: "AYOPPPK",
+    href: "https://ayopppk.com/",
+    image: "ayopppk",
+    alt: "AYOPPPK homepage introducing online PPPK exam preparation",
+    description: "An online learning platform helping PPPK candidates prepare through practice questions and computer-assisted test simulations.",
+    highlights: [
+      "CAT practice covering technical, managerial, and socio-cultural competencies.",
+      "Answer explanations, score charts, and per-question time analysis for self-evaluation.",
+      "Flexible study access on phones and computers, with multiple payment methods.",
+    ],
+  },
+];
 ---
 
 <div class="home-profile relative isolate space-y-9 pb-12 pt-8 sm:space-y-11 sm:pb-16 sm:pt-12">
@@ -62,6 +101,28 @@ const whatsapp = contacts.find(contact => contact.label === "WhatsApp");
       ))}
     </ol>
     <a href="/about#experience" class="more-link icon-link motion-external">Full experience &amp; skills <ArrowUpRight className="interaction-icon h-3.5 w-3.5" aria-hidden="true" /></a>
+  </section>
+
+  <section aria-labelledby="home-projects">
+    <h2 id="home-projects" class="section-label">Featured projects</h2>
+    <ol class="space-y-9">
+      {featuredProjects.map(project => (
+        <li>
+          <a href={project.href} target="_blank" rel="noopener noreferrer" class="block rounded-lg" aria-label={`Visit ${project.name} (opens in a new tab)`}>
+            <img src={`/assets/projects/${project.image}.webp`} alt={project.alt} width="1440" height="790" loading="lazy" decoding="async" class="mb-4 h-auto w-full rounded-lg" />
+          </a>
+          <h3 class="text-[15px] font-medium leading-[1.65]">
+            <a href={project.href} target="_blank" rel="noopener noreferrer" class="icon-link motion-external" aria-label={`${project.name} (opens in a new tab)`}>
+              {project.name} <ArrowUpRight className="interaction-icon inline h-3.5 w-3.5" aria-hidden="true" />
+            </a>
+          </h3>
+          <p class="mt-2 text-[14px] leading-[1.7] text-[var(--foreground-90)]">{project.description}</p>
+          <ul class="mt-3 list-disc space-y-1 pl-4 text-[13px] leading-[1.7] text-[var(--muted-foreground)]">
+            {project.highlights.map(highlight => <li>{highlight}</li>)}
+          </ul>
+        </li>
+      ))}
+    </ol>
   </section>
 
   <section aria-labelledby="home-writing">
