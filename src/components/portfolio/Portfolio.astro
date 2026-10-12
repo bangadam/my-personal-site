@@ -24,6 +24,9 @@ const whatsapp = contacts.find(contact => contact.label === "WhatsApp");
       <h1 class="text-[19px] font-normal leading-[1.35]">{profile.name}</h1>
       <p class="text-[13px] leading-[1.65] text-[var(--muted-foreground)]">{profile.title} · {profile.location}</p>
       <Socials compact />
+      <div class="pt-[10px]">
+        <a href={pdf.href} download class="cv-button icon-link motion-download">{pdf.label} <Download className="interaction-icon h-3.5 w-3.5" aria-hidden="true" /></a>
+      </div>
     </div>
   </header>
 

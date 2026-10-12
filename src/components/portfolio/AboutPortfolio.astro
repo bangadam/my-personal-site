@@ -76,7 +76,10 @@ const weeks = Array.from(
     <p class="mt-12 text-[16px] leading-[1.65] text-[var(--foreground-90)]">
       {profile.summary}
     </p>
-    <div class="mt-5"><Socials /></div>
+    <div class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3">
+      <Socials />
+      <a href={pdf.href} download class="cv-button icon-link motion-download">{pdf.label} <Download className="interaction-icon h-3.5 w-3.5" aria-hidden="true" /></a>
+    </div>
   </header>
 
   <section id="experience" class="mt-12 scroll-mt-20" aria-labelledby="work-heading">

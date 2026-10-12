@@ -364,5 +364,14 @@
         }
       ]
     }
+  ],
+  "education": [
+    {
+      "school": "Maulana Malik Ibrahim State Islamic University",
+      "degree": "BS, Computer Science",
+      "location": "Malang, Indonesia",
+      "period": "Jul 2018 - Dec 2022",
+      "details": ["GPA 3.6 / 4.0"]
+    }
   ]
 }

@@ -36,11 +36,13 @@ const contactLink = label => {
   return contact ? `<a href="${escapeHtml(contact.href)}">${escapeHtml(contact.value)}</a>` : "";
 };
 const contactLines = [
-  [escapeHtml(cv.profile.location), contactLink("WhatsApp"), contactLink("Email")],
+  [contactLink("Email"), contactLink("WhatsApp"), escapeHtml(cv.profile.location)],
   [contactLink("LinkedIn"), contactLink("GitHub")],
 ]
-  .map(line => `<p>${line.filter(Boolean).join(" | ")}</p>`)
+  .map(line => `<p class="contact">${line.filter(Boolean).join(" | ")}</p>`)
   .join("");
+
+const dash = value => escapeHtml(String(value).replace(/ - /g, " \u2013 "));
 
 const skills = cv.skillGroups
   .map(group => `<p><strong>${escapeHtml(group.title)}:</strong> ${group.skills.map(skill => `<span class="skill">${escapeHtml(skill.name.replace(/^([^:]{1,40}): (.+)$/, "$1 ($2)"))}</span>`).join(", ")}</p>`)
@@ -48,17 +50,17 @@ const skills = cv.skillGroups
 
 const experience = cv.roles
   .map(role => `<article class="entry">
-    <h3>${escapeHtml(role.company)}</h3>
-    <p>${[role.role, role.location, role.period].map(escapeHtml).join(" | ")}</p>
-    ${role.tags?.length ? `<p><strong>Tech:</strong> ${role.tags.map(escapeHtml).join(", ")}</p>` : ""}
+    <div class="row"><span class="org">${escapeHtml(role.company)}</span><span class="meta">${dash(role.period)}</span></div>
+    <div class="row"><span class="role">${escapeHtml(role.role)}</span><span class="meta">${escapeHtml(role.location)}</span></div>
+    ${role.tags?.length ? `<p class="tech">${role.tags.map(escapeHtml).join(", ")}</p>` : ""}
     ${role.bullets?.length ? `<ul>${role.bullets.map(bullet => `<li>${escapeHtml(bullet)}</li>`).join("")}</ul>` : ""}
   </article>`)
   .join("");
 
 const education = cv.education?.length
   ? `<section><h2>EDUCATION</h2>${cv.education.map(entry => `<article class="entry">
-    <h3>${escapeHtml(entry.school)}</h3>
-    <p>${[entry.degree, entry.location, entry.period].map(escapeHtml).join(" | ")}</p>
+    <div class="row"><span class="org">${escapeHtml(entry.school)}</span><span class="meta">${dash(entry.period)}</span></div>
+    <div class="row"><span class="role">${escapeHtml(entry.degree)}</span><span class="meta">${escapeHtml(entry.location)}</span></div>
     ${(entry.details ?? []).map(detail => `<p>${escapeHtml(detail)}</p>`).join("")}
   </article>`).join("")}</section>`
   : "";
@@ -74,26 +76,42 @@ const html = `<!doctype html>
 <meta charset="utf-8" />
 <title>${escapeHtml(cv.profile.name)} - CV</title>
 <style>
-@page { size: A4; margin: 25.4mm; }
+@page { size: A4; margin: 15mm 17mm; }
+* { box-sizing: border-box; }
 body {
   margin: 0;
   font-family: "Times New Roman", Times, "Liberation Serif", serif;
   font-size: 10.5pt;
-  line-height: 1.15;
+  line-height: 1.22;
+  color: #000;
 }
-h1, h2, h3, p { margin: 0; }
+h1, h2, h3, p, ul { margin: 0; }
 a { color: inherit; text-decoration: none; }
 header { text-align: center; }
-h1 { font-size: 18pt; font-weight: bold; margin-bottom: 1mm; }
-.title { font-size: 11pt; }
-h2 { font-size: 10.5pt; font-weight: bold; break-after: avoid; margin-bottom: 1mm; }
-h3 { font-size: 10.5pt; font-weight: bold; }
-section { margin-top: 3mm; }
+h1 { font-size: 17pt; font-weight: bold; letter-spacing: 1.2pt; text-transform: uppercase; }
+.title { margin-top: 1.5pt; }
+.contact { margin-top: 1.5pt; font-size: 10pt; }
+h2 {
+  font-size: 10.5pt;
+  font-weight: bold;
+  letter-spacing: 0.8pt;
+  text-transform: uppercase;
+  border-bottom: 1px solid #000;
+  padding-bottom: 1.5pt;
+  margin-bottom: 4pt;
+  break-after: avoid;
+}
+section { margin-top: 8pt; }
+.entry { margin-top: 5pt; break-inside: avoid; }
+.row { display: flex; justify-content: space-between; gap: 8pt; }
+.org { font-weight: bold; }
+.role { font-style: italic; }
+.meta { text-align: right; white-space: nowrap; }
+.tech { font-size: 9.5pt; font-style: italic; color: #333; margin-top: 0.5pt; }
+ul { margin-top: 2pt; }
+li { list-style: none; padding-left: 10pt; text-indent: -10pt; }
+li::before { content: "•"; display: inline-block; width: 10pt; }
 .skill { white-space: nowrap; }
-.entry { margin-top: 1.6mm; break-inside: avoid; }
-ul { margin: 0.6mm 0 0; padding-left: 5mm; }
-li { margin: 0; list-style: none; }
-li::before { content: "- "; }
 </style>
 </head>
 <body>
